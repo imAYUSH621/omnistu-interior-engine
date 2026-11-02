@@ -26,6 +26,27 @@ describe('Generator availability preflight (honest primary path)', () => {
     await expect(checkGeneratorAvailability({ timeoutMs: 20 })).resolves.toBe(false);
   }, 5000);
 
+  it('probe success is advisory: a failed actual request still returns a labelled fallback', async () => {
+    let calls = 0;
+    global.Image = class {
+      constructor() {
+        calls += 1;
+        if (calls === 1) setTimeout(() => this.onload && this.onload(), 5); // probe OK
+        else setTimeout(() => this.onerror && this.onerror(new Error('mid-flight drop')), 5); // real request fails
+      }
+    };
+    await checkGeneratorAvailability(); // caches "up"
+
+    const result = await generateArchitecturalRedesign({
+      roomType: 'Living Pavilion',
+      styleSnippet: 'Japandi',
+      customPrompt: '',
+      fallbackUrl: 'https://images.unsplash.com/fallback'
+    });
+    expect(result.isAiGenerated).toBe(false);
+    expect(result.imageUrl).toBe('https://images.unsplash.com/fallback');
+  });
+
   it('short-circuits to the sample render without a new probe when already known down', async () => {
     let imageConstructs = 0;
     global.Image = class {
