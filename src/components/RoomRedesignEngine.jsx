@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Sparkles, Upload, RefreshCw, SlidersHorizontal, Lock, CheckCircle, Eye, Download, Info } from 'lucide-react';
 import { STYLE_PRESETS, ROOM_PRESETS } from '../data/portfolio';
-import { generateArchitecturalRedesign } from '../services/imageGenerator';
+import { generateArchitecturalRedesign, checkGeneratorAvailability } from '../services/imageGenerator';
 
 export function RoomRedesignEngine({ client, onOpenLeadModal }) {
   const [selectedRoom, setSelectedRoom] = useState(ROOM_PRESETS[0]);
@@ -13,9 +13,24 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
   const [sliderPosition, setSliderPosition] = useState(50);
   const [generationStep, setGenerationStep] = useState('');
   const [isAiRendered, setIsAiRendered] = useState(false);
+  // 'checking' | 'available' | 'unavailable' - preflight keeps the primary
+  // path honest before the visitor clicks Generate.
+  const [aiStatus, setAiStatus] = useState('checking');
 
   const containerRef = useRef(null);
   const isDragging = useRef(false);
+  const stepTimers = useRef([]);
+
+  useEffect(() => {
+    let mounted = true;
+    checkGeneratorAvailability().then((ok) => {
+      if (mounted) setAiStatus(ok ? 'available' : 'unavailable');
+    });
+    return () => {
+      mounted = false;
+      stepTimers.current.forEach(clearTimeout);
+    };
+  }, []);
 
   // Active raw image (custom upload takes priority over preset)
   const currentBeforeImage = customImage || selectedRoom.rawImage;
@@ -37,9 +52,12 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
   const handleGenerate = async () => {
     setIsGenerating(true);
     setGenerationStep('Preparing your design brief...');
-    
-    setTimeout(() => setGenerationStep('Generating your concept image with AI...'), 1200);
-    setTimeout(() => setGenerationStep('Adding finishing touches...'), 2400);
+
+    stepTimers.current.forEach(clearTimeout);
+    stepTimers.current = [
+      setTimeout(() => setGenerationStep('Generating your concept image with AI...'), 1200),
+      setTimeout(() => setGenerationStep('Adding finishing touches...'), 2400),
+    ];
 
     const result = await generateArchitecturalRedesign({
       roomType: selectedRoom.name,
@@ -48,6 +66,8 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
       fallbackUrl: selectedRoom.fallbackRender
     });
 
+    stepTimers.current.forEach(clearTimeout);
+    stepTimers.current = [];
     setGeneratedImage(result.imageUrl);
     setIsAiRendered(result.isAiGenerated);
     setIsGenerating(false);
@@ -206,7 +226,7 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
               ) : (
                 <>
                   <Sparkles className="w-4 h-4 text-amber-200" />
-                  <span>Generate My Free Design Concept</span>
+                  <span>{aiStatus === 'unavailable' ? 'Show Style Concept (Sample Render)' : 'Generate My Free Design Concept'}</span>
                 </>
               )}
             </button>
@@ -215,6 +235,12 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
               <span>Free AI concept generation</span>
               <span>For inspiration and planning only</span>
             </div>
+
+            {aiStatus === 'unavailable' && (
+              <p className="mt-2 text-[11px] font-mono text-amber-400/90 leading-relaxed">
+                The free AI generator is busy right now. Generate will instantly show a curated sample render in your chosen style instead, clearly labelled as a sample.
+              </p>
+            )}
 
           </div>
 
