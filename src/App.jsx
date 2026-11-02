@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { RoomRedesignEngine } from './components/RoomRedesignEngine';
@@ -62,6 +62,51 @@ export function App() {
       el.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  // Embeddable widget mode: ?view=embed renders only the AI concept engine
+  // and lead modal, for iframing into a client's existing website.
+  const isEmbed = useMemo(() => {
+    try {
+      return new URLSearchParams(window.location.search).get('view') === 'embed';
+    } catch {
+      return false;
+    }
+  }, []);
+
+  // Report height to the parent page so the iframe can auto-resize
+  useEffect(() => {
+    if (!isEmbed || typeof window === 'undefined' || window.parent === window) return;
+    if (typeof ResizeObserver === 'undefined') return;
+    const post = () => {
+      try {
+        window.parent.postMessage(
+          { type: 'omnistu-embed-height', height: document.documentElement.scrollHeight },
+          '*'
+        );
+      } catch { /* non-blocking */ }
+    };
+    const observer = new ResizeObserver(post);
+    observer.observe(document.body);
+    post();
+    return () => observer.disconnect();
+  }, [isEmbed]);
+
+  if (isEmbed) {
+    return (
+      <div className="min-h-screen bg-[#0c0c0e] text-[#f4f2ee] font-sans antialiased selection:bg-brand-500 selection:text-white">
+        <RoomRedesignEngine
+          client={currentClient}
+          onOpenLeadModal={handleOpenLeadModal}
+        />
+        <LeadModal
+          isOpen={leadModalOpen}
+          onClose={() => setLeadModalOpen(false)}
+          client={currentClient}
+          contextData={leadContext}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0c0c0e] text-[#f4f2ee] font-sans antialiased flex flex-col selection:bg-brand-500 selection:text-white">
