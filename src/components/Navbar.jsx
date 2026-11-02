@@ -100,7 +100,7 @@ export function Navbar({ client, onSelectClient, onOpenOnboard, onBookConsult })
             className="px-4 py-2 rounded-lg bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-medium text-xs sm:text-sm tracking-wide shadow-lg shadow-brand-500/25 transition active:scale-95 flex items-center space-x-2"
           >
             <Calendar className="w-4 h-4" />
-            <span>Book Consultation</span>
+            <span>Request Consultation</span>
           </button>
         </div>
 

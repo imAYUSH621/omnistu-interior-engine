@@ -10,6 +10,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
     notes: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [delivery, setDelivery] = useState(null); // 'sent' | 'failed' | 'demo'
 
   if (!isOpen) return null;
 
@@ -39,17 +40,21 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
       // Non-blocking fallback
     }
 
-    // Deliver to the configured endpoint when one is set (build-time env)
+    // Deliver to the configured endpoint when one is set (build-time env).
+    // Success is only claimed on actual durable receipt.
     if (leadEndpoint) {
       try {
-        await fetch(leadEndpoint, {
+        const res = await fetch(leadEndpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify(newLead)
         });
+        setDelivery(res && res.ok ? 'sent' : 'failed');
       } catch {
-        // Delivery failure is non-blocking; the visitor still gets direct contact options
+        setDelivery('failed');
       }
+    } else {
+      setDelivery('demo');
     }
 
     setSubmitted(true);
@@ -173,16 +178,22 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
           </div>
         ) : (
           <div className="text-center py-4 space-y-6">
-            <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 mx-auto flex items-center justify-center shadow-lg">
+            <div className={`w-16 h-16 rounded-full mx-auto flex items-center justify-center shadow-lg ${delivery === 'sent' ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400' : 'bg-amber-500/20 border border-amber-500/40 text-amber-400'}`}>
               <CheckCircle className="w-8 h-8" />
             </div>
 
             <div>
               <h3 className="text-2xl font-bold font-display text-white">
-                Request Received!
+                {delivery === 'sent' ? 'Request Received!' : delivery === 'failed' ? 'Sending Failed' : 'Demo Mode - Not Sent'}
               </h3>
               <p className="text-xs text-zinc-300 mt-2 max-w-sm mx-auto leading-relaxed">
-                Thank you, <span className="font-semibold text-white">{formData.name}</span>. The <span className="text-brand-300">{client.name}</span> team has received your request and will follow up shortly.
+                {delivery === 'sent' ? (
+                  <>Thank you, <span className="font-semibold text-white">{formData.name}</span>. The <span className="text-brand-300">{client.name}</span> team has received your request and will follow up shortly.</>
+                ) : delivery === 'failed' ? (
+                  <>Sorry, <span className="font-semibold text-white">{formData.name}</span> - your request could not be delivered just now. Please use the direct contact options below.</>
+                ) : (
+                  <>Thank you, <span className="font-semibold text-white">{formData.name}</span>. This demo is not connected to a live inbox yet, so your request was <span className="font-semibold text-amber-300">not sent anywhere</span>. In the live version it goes straight to the studio.</>
+                )}
               </p>
             </div>
 

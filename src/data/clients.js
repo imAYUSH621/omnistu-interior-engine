@@ -80,7 +80,7 @@ export const DEFAULT_CLIENT = {
   email: '',
   tagline: 'AI interior design concepts, instant estimates and client demos',
   heroHeadline: 'Get a Free AI Design Concept for Your Space',
-  heroSubheadline: 'This is a live demo of the Omnistu interior engine. Pick a style, generate a free AI design concept, and see how we turn browsers into booked consultations.',
+  heroSubheadline: 'This is a live demo of the Omnistu interior engine. Pick a style and generate a free AI design concept - for inspiration and planning.',
   accentColor: '#a38461',
   badge: 'Live demo by Omnistu - sample data',
   projectsCompleted: '',

@@ -23,7 +23,7 @@ export function PortfolioShowcase({ client, onOpenLeadModal }) {
             Sample Concepts & Style Gallery
           </h2>
           <p className="mt-4 text-base sm:text-lg text-zinc-400 font-light">
-            Flip through sample concepts created with our design engine. Photos, locations, budgets and specs are illustrative samples - for inspiration and planning only.
+            A sample gallery pairing stock reference photos (Unsplash) with style concepts. Every project, location, budget and spec on these cards is illustrative - not real client work.
           </p>
         </div>
 
@@ -47,21 +47,20 @@ export function PortfolioShowcase({ client, onOpenLeadModal }) {
                   />
 
                   {/* Top Badges */}
-                  <div className="absolute top-4 left-4 flex space-x-2">
+                  <div className="absolute top-4 left-4 right-4 flex flex-wrap gap-2">
                     <span className={`px-3 py-1 rounded-lg text-[11px] font-mono font-semibold backdrop-blur-md border ${
                       isShowingBefore
                         ? 'bg-amber-950/80 text-amber-300 border-amber-500/40'
                         : 'bg-black/75 text-zinc-200 border-white/10'
                     }`}>
-                      {isShowingBefore ? 'REFERENCE PHOTO' : 'STYLE CONCEPT'}
+                      {isShowingBefore ? 'REFERENCE PHOTO (STOCK)' : 'STYLE CONCEPT'}
+                    </span>
+                    <span className="px-3 py-1 rounded-lg text-[11px] font-mono font-semibold bg-amber-500/90 backdrop-blur-md text-black border border-amber-300">
+                      ILLUSTRATIVE SAMPLE
                     </span>
                   </div>
 
-                  <div className="absolute top-4 right-4">
-                    <span className="px-3 py-1 rounded-lg text-[11px] font-mono bg-brand-500/85 backdrop-blur-md text-white border border-brand-400 font-medium">
-                      {item.budgetTier}
-                    </span>
-                  </div>
+
 
                   {/* Toggle Flip Button */}
                   <button
@@ -69,7 +68,7 @@ export function PortfolioShowcase({ client, onOpenLeadModal }) {
                     className="absolute bottom-4 right-4 px-4 py-2 rounded-xl bg-zinc-900/90 hover:bg-black text-white text-xs font-mono border border-zinc-700 shadow-xl backdrop-blur-md transition-all active:scale-95 flex items-center space-x-2"
                   >
                     <Eye className="w-3.5 h-3.5 text-brand-400" />
-                    <span>Flip to {isShowingBefore ? 'After' : 'Before'}</span>
+                    <span>{isShowingBefore ? 'View Style Concept' : 'View Reference Photo'}</span>
                   </button>
                 </div>
 

@@ -142,6 +142,9 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
                   <span>{customImage ? 'Replace Uploaded Room Photo' : 'Upload Your Existing Room (Free)'}</span>
                   <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
                 </label>
+                <p className="mt-2 text-[10px] leading-snug text-zinc-500 font-mono">
+                  Your photo stays on this page and is not sent or analyzed - the AI concept is generated from your style choices only.
+                </p>
               </div>
             </div>
 
@@ -258,7 +261,7 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
 
               {/* Badges on Viewport */}
               <div className="absolute top-4 left-4 px-3 py-1 rounded-lg bg-black/75 backdrop-blur-md text-[11px] font-mono text-zinc-200 border border-white/10">
-                {customImage ? 'YOUR PHOTO (REFERENCE)' : 'SAMPLE ROOM (REFERENCE)'}
+                {customImage ? 'YOUR PHOTO (NOT ANALYZED)' : 'SAMPLE ROOM (REFERENCE)'}
               </div>
               <div className="absolute top-4 right-4 px-3 py-1 rounded-lg bg-brand-500/90 backdrop-blur-md text-[11px] font-mono text-white border border-brand-400 font-semibold shadow-lg">
                 {isAiRendered ? `AI CONCEPT (${selectedStyle.name.toUpperCase()})` : 'SAMPLE PHOTO (AI BUSY)'}

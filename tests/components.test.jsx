@@ -40,10 +40,10 @@ describe('React Component Suite & Full Application Flow', () => {
     );
 
     expect(screen.getByText(DEFAULT_CLIENT.name)).toBeDefined();
-    expect(screen.getByText('Book Consultation')).toBeDefined();
+    expect(screen.getByText('Request Consultation')).toBeDefined();
 
     // Trigger consultation button
-    fireEvent.click(screen.getByText('Book Consultation'));
+    fireEvent.click(screen.getByText('Request Consultation'));
     expect(handleConsult).toHaveBeenCalled();
 
     // Trigger switcher dropdown
@@ -161,9 +161,9 @@ describe('React Component Suite & Full Application Flow', () => {
     const openModal = vi.fn();
     render(<PortfolioShowcase client={DEFAULT_CLIENT} onOpenLeadModal={openModal} />);
 
-    expect(screen.getByText(/The Tribeca Japandi Sanctuary/i)).toBeDefined();
+    expect(screen.getByText(/Japandi Living Concept/i)).toBeDefined();
     
-    const flipButtons = screen.getAllByText(/Flip to/i);
+    const flipButtons = screen.getAllByText(/View Reference Photo/i);
     expect(flipButtons.length).toBeGreaterThan(0);
     fireEvent.click(flipButtons[0]);
 
@@ -173,7 +173,7 @@ describe('React Component Suite & Full Application Flow', () => {
     expect(openModal).toHaveBeenCalled();
   });
 
-  it('submits LeadModal and captures lead data', () => {
+  it('submits LeadModal and captures lead data', async () => {
     const handleClose = vi.fn();
     render(
       <LeadModal
@@ -194,8 +194,9 @@ describe('React Component Suite & Full Application Flow', () => {
     // Submit form
     fireEvent.click(screen.getByText(/Request My Free Consultation/i));
 
-    // Success screen (sample client has no contact details, so no WhatsApp button)
-    expect(screen.getByText(/Request Received/i)).toBeDefined();
+    // No endpoint configured: must NOT claim receipt - explicit demo-not-sent state
+    expect(await screen.findByText(/Demo Mode - Not Sent/i)).toBeDefined();
+    expect(screen.queryByText(/Request Received/i)).toBeNull();
     expect(screen.queryByText(/Chat Instantly on WhatsApp/i)).toBeNull();
 
     // Close window
