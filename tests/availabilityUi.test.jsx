@@ -24,7 +24,17 @@ describe('Availability-aware engine UI', () => {
     await waitFor(() => {
       expect(screen.getByText(/Show Style Concept \(Sample Render\)/i)).toBeDefined();
     });
-    expect(screen.getByText(/free AI generator is busy right now/i)).toBeDefined();
+    // warning names the button's new action, not the old one
+    expect(screen.getByText(/This will instantly show a curated sample render/i)).toBeDefined();
+    expect(screen.queryByText(/Generate will instantly show/i)).toBeNull();
+    // supporting caption and headline stop promising AI output
+    expect(screen.getByText(/Sample concept \(generator busy\)/i)).toBeDefined();
+    expect(screen.queryByText(/^Free AI concept generation$/i)).toBeNull();
+    expect(screen.getByText(/Explore Design Concepts in Your Chosen Style/i)).toBeDefined();
+    expect(screen.queryByText(/Get a Free AI Design Concept in Your Chosen Style/i)).toBeNull();
+    // upload helper stops promising an AI-generated concept too
+    expect(screen.getByText(/the sample concept comes from your style choices only/i)).toBeDefined();
+    expect(screen.queryByText(/the AI concept is generated from your style choices only/i)).toBeNull();
   });
 
   it('keeps the standard CTA and no warning when the generator is up', async () => {

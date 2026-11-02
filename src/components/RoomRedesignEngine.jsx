@@ -117,10 +117,12 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
             <span>Interactive AI Staging Studio</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-extrabold font-display text-white tracking-tight">
-            Get a Free AI Design Concept in Your Chosen Style
+            {aiStatus === 'unavailable' ? 'Explore Design Concepts in Your Chosen Style' : 'Get a Free AI Design Concept in Your Chosen Style'}
           </h2>
           <p className="mt-4 text-base sm:text-lg text-zinc-400 font-light">
-            Select a sample room or upload a photo for reference, choose a signature style, and our AI generates a design concept - for inspiration and planning, not a literal preview of your room.
+            {aiStatus === 'unavailable'
+              ? 'Select a sample room or keep a photo for reference, choose a signature style, and view a curated sample concept - the free AI generator is temporarily busy, and every render is clearly labelled as a sample.'
+              : 'Select a sample room or upload a photo for reference, choose a signature style, and our AI generates a design concept - for inspiration and planning, not a literal preview of your room.'}
           </p>
         </div>
 
@@ -163,7 +165,9 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
                   <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
                 </label>
                 <p className="mt-2 text-[10px] leading-snug text-zinc-500 font-mono">
-                  Your photo stays on this page and is not sent or analyzed - the AI concept is generated from your style choices only.
+                  {aiStatus === 'unavailable'
+                    ? 'Your photo stays on this page and is not sent or analyzed - the sample concept comes from your style choices only.'
+                    : 'Your photo stays on this page and is not sent or analyzed - the AI concept is generated from your style choices only.'}
                 </p>
               </div>
             </div>
@@ -232,13 +236,13 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
             </button>
 
             <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 pt-1">
-              <span>Free AI concept generation</span>
+              <span>{aiStatus === 'unavailable' ? 'Sample concept (generator busy)' : 'Free AI concept generation'}</span>
               <span>For inspiration and planning only</span>
             </div>
 
             {aiStatus === 'unavailable' && (
               <p className="mt-2 text-[11px] font-mono text-amber-400/90 leading-relaxed">
-                The free AI generator is busy right now. Generate will instantly show a curated sample render in your chosen style instead, clearly labelled as a sample.
+                The free AI generator is busy right now. This will instantly show a curated sample render in your chosen style, clearly labelled as a sample.
               </p>
             )}
 

@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sparkles, ArrowRight, CheckCircle2, ShieldCheck, Clock, Award } from 'lucide-react';
+import { checkGeneratorAvailability } from '../services/imageGenerator';
 
 export function Hero({ client, onLaunchRedesign, onLaunchEstimator }) {
+  // The free AI endpoint is best-effort; do not promise AI output when the
+  // cached probe already knows only the sample path is available.
+  const [aiDown, setAiDown] = useState(false);
+  useEffect(() => {
+    let mounted = true;
+    checkGeneratorAvailability().then((ok) => { if (mounted && !ok) setAiDown(true); });
+    return () => { mounted = false; };
+  }, []);
   return (
     <section className="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden border-b border-white/5">
       {/* Subtle Background Glows */}
@@ -18,12 +27,14 @@ export function Hero({ client, onLaunchRedesign, onLaunchEstimator }) {
 
         {/* Dynamic Client Headline */}
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight font-display text-white max-w-5xl mx-auto leading-[1.12]">
-          {client.heroHeadline}
+          {aiDown ? 'Explore Interior Design Concepts for Your Space' : client.heroHeadline}
         </h1>
 
         {/* Dynamic Subheadline */}
         <p className="mt-6 text-base sm:text-xl text-zinc-300 max-w-3xl mx-auto font-sans font-light leading-relaxed">
-          {client.heroSubheadline}
+          {aiDown
+            ? 'Our free AI concept generator is temporarily busy - browse curated sample concepts in signature styles, each clearly labelled as a sample.'
+            : client.heroSubheadline}
         </p>
 
         {/* Primary & Secondary Dual CTAs */}
@@ -33,7 +44,7 @@ export function Hero({ client, onLaunchRedesign, onLaunchEstimator }) {
             className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-base shadow-xl shadow-brand-500/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center space-x-3 group"
           >
             <Sparkles className="w-5 h-5 text-amber-200" />
-            <span>Launch Free AI Design Concept</span>
+            <span>{aiDown ? 'Browse Design Concepts' : 'Launch Free AI Design Concept'}</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
 
@@ -72,8 +83,8 @@ export function Hero({ client, onLaunchRedesign, onLaunchEstimator }) {
               <Clock className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-white font-bold text-sm">Free AI Concepts</div>
-              <div className="text-zinc-400 text-xs font-mono">Style Inspiration Only</div>
+              <div className="text-white font-bold text-sm">{aiDown ? 'Free Style Concepts' : 'Free AI Concepts'}</div>
+              <div className="text-zinc-400 text-xs font-mono">{aiDown ? 'Samples While AI Is Busy' : 'Style Inspiration Only'}</div>
             </div>
           </div>
 
