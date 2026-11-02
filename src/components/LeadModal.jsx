@@ -49,7 +49,14 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify(newLead)
         });
-        setDelivery(res && res.ok ? 'sent' : 'failed');
+        // HTTP ok alone is not proof of acceptance: when the endpoint returns a
+        // JSON body with a success flag (Web3Forms/Formspree style), honor it.
+        let accepted = !!(res && res.ok);
+        if (accepted && typeof res.clone === 'function') {
+          const data = await res.clone().json().catch(() => null);
+          if (data && (data.success === false || data.ok === false)) accepted = false;
+        }
+        setDelivery(accepted ? 'sent' : 'failed');
       } catch {
         setDelivery('failed');
       }
