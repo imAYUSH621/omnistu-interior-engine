@@ -18,6 +18,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
   // injected at build time. Empty = leads stay on the visitor's device only.
   const leadEndpoint = (import.meta.env && import.meta.env.VITE_LEAD_ENDPOINT) || '';
   const whatsappNumber = client.whatsapp || (import.meta.env && import.meta.env.VITE_DEMO_WHATSAPP) || '';
+  const bookingUrl = (import.meta.env && import.meta.env.VITE_BOOKING_URL) || '';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -204,7 +205,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
               </p>
             </div>
 
-            {(whatsappNumber || client.phone) && (
+            {(whatsappNumber || client.phone || bookingUrl) && (
             <div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 text-left space-y-3">
               <div className="text-xs font-mono uppercase tracking-wider text-zinc-400">
                 Instant Speed-to-Lead Direct Options:
@@ -231,6 +232,19 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
               >
                 <Phone className="w-3.5 h-3.5 text-brand-400" />
                 <span>Call Studio Desk: {client.phone}</span>
+              </a>
+              )}
+
+              {/* Booking link (only when a real scheduler URL is configured) */}
+              {bookingUrl && (
+              <a
+                href={bookingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-2.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold flex items-center justify-center space-x-2 transition"
+              >
+                <Clock className="w-3.5 h-3.5" />
+                <span>Book a Consultation Slot</span>
               </a>
               )}
             </div>
