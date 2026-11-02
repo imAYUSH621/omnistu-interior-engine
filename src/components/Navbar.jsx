@@ -82,8 +82,9 @@ export function Navbar({ client, onSelectClient, onOpenOnboard, onBookConsult })
           </div>
 
           {/* Quick WhatsApp / Phone Call */}
+          {client.whatsapp && (
           <a
-            href={`https://wa.me/${client.whatsapp}?text=${encodeURIComponent(`Hi ${client.name}, I just tested your 3D Room Redesign tool and would like to speak with a senior designer.`)}`}
+            href={`https://wa.me/${client.whatsapp}?text=${encodeURIComponent(`Hi ${client.name}, I just tried your AI design concept tool and would like to speak with the team.`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden lg:flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/60 text-xs font-mono transition"
@@ -91,6 +92,7 @@ export function Navbar({ client, onSelectClient, onOpenOnboard, onBookConsult })
             <MessageCircle className="w-3.5 h-3.5" />
             <span>WhatsApp</span>
           </a>
+          )}
 
           {/* Primary Action Button */}
           <button
@@ -98,7 +100,7 @@ export function Navbar({ client, onSelectClient, onOpenOnboard, onBookConsult })
             className="px-4 py-2 rounded-lg bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-medium text-xs sm:text-sm tracking-wide shadow-lg shadow-brand-500/25 transition active:scale-95 flex items-center space-x-2"
           >
             <Calendar className="w-4 h-4" />
-            <span>Book Consultation</span>
+            <span>Request Consultation</span>
           </button>
         </div>
 

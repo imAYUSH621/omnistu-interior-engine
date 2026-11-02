@@ -21,7 +21,7 @@ describe('React Component Suite & Full Application Flow', () => {
   it('renders App seamlessly with top-level tenant routing', () => {
     render(<App />);
     expect(screen.getAllByText(DEFAULT_CLIENT.name).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/See Your Space Transformed/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Get a Free AI Design Concept/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Transparent Investment Estimator/i).length).toBeGreaterThan(0);
   });
 
@@ -40,10 +40,10 @@ describe('React Component Suite & Full Application Flow', () => {
     );
 
     expect(screen.getByText(DEFAULT_CLIENT.name)).toBeDefined();
-    expect(screen.getByText('Book Consultation')).toBeDefined();
+    expect(screen.getByText('Request Consultation')).toBeDefined();
 
     // Trigger consultation button
-    fireEvent.click(screen.getByText('Book Consultation'));
+    fireEvent.click(screen.getByText('Request Consultation'));
     expect(handleConsult).toHaveBeenCalled();
 
     // Trigger switcher dropdown
@@ -75,7 +75,7 @@ describe('React Component Suite & Full Application Flow', () => {
 
     expect(screen.getByText(DEFAULT_CLIENT.heroHeadline)).toBeDefined();
     
-    fireEvent.click(screen.getByText('Launch Instant 3D Room Redesign'));
+    fireEvent.click(screen.getByText('Launch Free AI Design Concept'));
     expect(launchRedesign).toHaveBeenCalled();
 
     fireEvent.click(screen.getByText('Calculate Project Scope & Budget'));
@@ -100,7 +100,7 @@ describe('React Component Suite & Full Application Flow', () => {
     expect(customInput.value).toBe('Roman travertine floor');
 
     // Drag slider
-    const sliderContainer = screen.getByText('RAW SPACE (BEFORE)').closest('.cursor-ew-resize');
+    const sliderContainer = screen.getByText('SAMPLE ROOM (REFERENCE)').closest('.cursor-ew-resize');
     if (sliderContainer) {
       fireEvent.mouseDown(sliderContainer, { clientX: 200 });
       fireEvent.mouseMove(sliderContainer, { clientX: 300 });
@@ -112,13 +112,13 @@ describe('React Component Suite & Full Application Flow', () => {
     }
 
     // Trigger generate button
-    const genButton = screen.getByText(/Generate Instant 3D Architectural Staging/i);
+    const genButton = screen.getByText(/Generate My Free Design Concept/i);
     await act(async () => {
       fireEvent.click(genButton);
     });
 
     // Click unlock 4K blueprints
-    fireEvent.click(screen.getByText(/Unlock 4K Blueprints/i));
+    fireEvent.click(screen.getByText(/Get Full Concept Details/i));
     expect(openLead).toHaveBeenCalled();
   });
 
@@ -152,7 +152,7 @@ describe('React Component Suite & Full Application Flow', () => {
     fireEvent.click(screen.getByText('Ultra-Bespoke Penthouse'));
 
     // Trigger download blueprint button
-    const ctaButton = screen.getByText('Download Itemized Cost Blueprint');
+    const ctaButton = screen.getByText('Get Itemized Estimate & Free Consult');
     fireEvent.click(ctaButton);
     expect(openModal).toHaveBeenCalled();
   });
@@ -161,9 +161,9 @@ describe('React Component Suite & Full Application Flow', () => {
     const openModal = vi.fn();
     render(<PortfolioShowcase client={DEFAULT_CLIENT} onOpenLeadModal={openModal} />);
 
-    expect(screen.getByText(/The Tribeca Japandi Sanctuary/i)).toBeDefined();
+    expect(screen.getByText(/Japandi Living Concept/i)).toBeDefined();
     
-    const flipButtons = screen.getAllByText(/Flip to/i);
+    const flipButtons = screen.getAllByText(/View Reference Photo/i);
     expect(flipButtons.length).toBeGreaterThan(0);
     fireEvent.click(flipButtons[0]);
 
@@ -173,7 +173,7 @@ describe('React Component Suite & Full Application Flow', () => {
     expect(openModal).toHaveBeenCalled();
   });
 
-  it('submits LeadModal and captures lead data', () => {
+  it('submits LeadModal and captures lead data', async () => {
     const handleClose = vi.fn();
     render(
       <LeadModal
@@ -184,7 +184,7 @@ describe('React Component Suite & Full Application Flow', () => {
       />
     );
 
-    expect(screen.getByText(/Unlock 4K Blueprints & Itemized Scope/i)).toBeDefined();
+    expect(screen.getByText(/Get Your Full Concept & Free Consultation/i)).toBeDefined();
 
     // Fill form
     fireEvent.change(screen.getByPlaceholderText(/Katherine Vance/i), { target: { value: 'Jane Doe' } });
@@ -192,11 +192,12 @@ describe('React Component Suite & Full Application Flow', () => {
     fireEvent.change(screen.getByPlaceholderText(/katherine@vance.com/i), { target: { value: 'jane@example.com' } });
 
     // Submit form
-    fireEvent.click(screen.getByText(/Send Blueprint & Priority Access/i));
+    fireEvent.click(screen.getByText(/Request My Free Consultation/i));
 
-    // Success screen
-    expect(screen.getByText(/Blueprint Sent Successfully/i)).toBeDefined();
-    expect(screen.getByText(/Chat Instantly on WhatsApp/i)).toBeDefined();
+    // No endpoint configured: must NOT claim receipt - explicit demo-not-sent state
+    expect(await screen.findByText(/Demo Mode - Not Sent/i)).toBeDefined();
+    expect(screen.queryByText(/Request Received/i)).toBeNull();
+    expect(screen.queryByText(/Chat Instantly on WhatsApp/i)).toBeNull();
 
     // Close window
     fireEvent.click(screen.getByText(/Close Window/i));

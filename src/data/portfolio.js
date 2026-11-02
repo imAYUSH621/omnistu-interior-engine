@@ -3,13 +3,13 @@
 export const PORTFOLIO_ITEMS = [
   {
     id: 'living-room-japandi',
-    title: 'The Tribeca Japandi Sanctuary',
-    category: 'Full Living & Dining Pavilion',
-    location: 'Tribeca, New York',
-    sqft: '1,450 sq ft',
-    duration: '7 Weeks',
-    budgetTier: 'Architectural Luxury ($85k)',
-    description: 'Transforming a sterile concrete loft into an organic sanctuary featuring fluted white oak millwork, custom bouclé sectional, and hidden acoustic wall panels.',
+    title: 'Japandi Living Concept',
+    category: 'Living & Dining Concept',
+    location: 'Sample location',
+    sqft: 'Sample size',
+    duration: 'Sample timeline',
+    budgetTier: 'Sample budget ($85k tier)',
+    description: 'Concept: an organic Japandi living pavilion with fluted white oak millwork, a custom boucle sectional and warm hidden lighting.',
     beforeImage: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
     afterImage: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80',
     specs: [
@@ -21,15 +21,15 @@ export const PORTFOLIO_ITEMS = [
   },
   {
     id: 'chef-kitchen-bespoke',
-    title: 'The Calacatta Marble Chef’s Pavilion',
-    category: 'Gourmet Kitchen & Scullery',
-    location: 'Bel Air, California',
-    sqft: '850 sq ft',
-    duration: '6 Weeks',
-    budgetTier: 'Ultra-Bespoke ($120k)',
-    description: 'Complete gut renovation replacing 1990s cabinetry with book-matched Italian Calacatta Viola marble, smoked oak panels, and seamlessly integrated Gaggenau appliances.',
+    title: 'Marble Chef Kitchen Concept',
+    category: 'Gourmet Kitchen Concept',
+    location: 'Sample location',
+    sqft: 'Sample size',
+    duration: 'Sample timeline',
+    budgetTier: 'Sample budget ($120k tier)',
+    description: 'Concept: a gourmet kitchen with a marble-look waterfall island, smoked oak cabinetry and seamlessly integrated appliances.',
     beforeImage: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+    afterImage: 'https://images.unsplash.com/photo-1556912167-f556f1f39fdf?auto=format&fit=crop&w=1200&q=80',
     specs: [
       'Book-matched 3cm Calacatta Viola marble waterfall island with fluted brass toe kick',
       'Hand-crafted smoked oak veneer cabinetry with Blum soft-close Servo-Drive',
@@ -39,13 +39,13 @@ export const PORTFOLIO_ITEMS = [
   },
   {
     id: 'primary-suite-haven',
-    title: 'The Organic Minimalist Primary Suite',
-    category: 'Master Bedroom & Lounge',
-    location: 'Aspen, Colorado',
-    sqft: '1,100 sq ft',
-    duration: '5 Weeks',
-    budgetTier: 'Bespoke Modern ($68k)',
-    description: 'A serene mountain retreat blending textured limewash walls, custom upholstered platform bed, and floor-to-ceiling motorized linen drapery.',
+    title: 'Organic Minimalist Suite Concept',
+    category: 'Primary Suite Concept',
+    location: 'Sample location',
+    sqft: 'Sample size',
+    duration: 'Sample timeline',
+    budgetTier: 'Sample budget ($68k tier)',
+    description: 'Concept: a serene suite with textured limewash walls, an upholstered platform bed and full-height drapery.',
     beforeImage: 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1200&q=80',
     afterImage: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1200&q=80',
     specs: [
@@ -57,13 +57,13 @@ export const PORTFOLIO_ITEMS = [
   },
   {
     id: 'spa-bath-retreat',
-    title: 'The Roman Travertine Wellness Bath',
-    category: 'Primary En-Suite & Wet Room',
-    location: 'Austin, Texas',
-    sqft: '420 sq ft',
-    duration: '4 Weeks',
-    budgetTier: 'Architectural Luxury ($52k)',
-    description: 'A monolithic private wet room featuring fluted travertine tiles, a solid stone freestanding soaking tub, and rainfall shower with chromotherapy.',
+    title: 'Travertine Wellness Bath Concept',
+    category: 'En-Suite & Wet Room Concept',
+    location: 'Sample location',
+    sqft: 'Sample size',
+    duration: 'Sample timeline',
+    budgetTier: 'Sample budget ($52k tier)',
+    description: 'Concept: a private wet room with travertine-look tiles, a freestanding soaking tub and a rainfall shower.',
     beforeImage: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&q=80',
     afterImage: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=1200&q=80',
     specs: [
@@ -102,7 +102,7 @@ export const STYLE_PRESETS = [
     name: 'Modern Haussmann Classic',
     tagline: 'High ornate ceiling mouldings, herringbone parquet, and velvet depth',
     promptSnippet: 'Parisian Haussmann luxury apartment interior design, ornate white wall mouldings, French herringbone oak parquet flooring, modern velvet accent chair, marble fireplace, floor-to-ceiling French doors, magazine quality',
-    thumb: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=400&q=80'
+    thumb: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=400&q=80'
   }
 ];
 
@@ -117,7 +117,7 @@ export const ROOM_PRESETS = [
     id: 'kitchen',
     name: 'Gourmet Kitchen',
     rawImage: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80',
-    fallbackRender: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80'
+    fallbackRender: 'https://images.unsplash.com/photo-1556912167-f556f1f39fdf?auto=format&fit=crop&w=1200&q=80'
   },
   {
     id: 'bedroom',

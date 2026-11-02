@@ -33,7 +33,7 @@ export function Hero({ client, onLaunchRedesign, onLaunchEstimator }) {
             className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-base shadow-xl shadow-brand-500/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center space-x-3 group"
           >
             <Sparkles className="w-5 h-5 text-amber-200" />
-            <span>Launch Instant 3D Room Redesign</span>
+            <span>Launch Free AI Design Concept</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
 
@@ -52,8 +52,8 @@ export function Hero({ client, onLaunchRedesign, onLaunchEstimator }) {
               <CheckCircle2 className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-white font-bold text-sm">{client.projectsCompleted}</div>
-              <div className="text-zinc-400 text-xs font-mono">Projects Delivered</div>
+              <div className="text-white font-bold text-sm">{client.isSample ? 'Live' : client.projectsCompleted}</div>
+              <div className="text-zinc-400 text-xs font-mono">{client.isSample ? 'Product Demo' : 'Projects Delivered'}</div>
             </div>
           </div>
 
@@ -62,8 +62,8 @@ export function Hero({ client, onLaunchRedesign, onLaunchEstimator }) {
               <Award className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-white font-bold text-sm">{client.avgRating} / 5.0 Rating</div>
-              <div className="text-zinc-400 text-xs font-mono">Client Satisfaction</div>
+              <div className="text-white font-bold text-sm">{client.isSample ? 'Sample' : `${client.avgRating} / 5.0 Rating`}</div>
+              <div className="text-zinc-400 text-xs font-mono">{client.isSample ? 'Demo Content' : 'Client Satisfaction'}</div>
             </div>
           </div>
 
@@ -72,8 +72,8 @@ export function Hero({ client, onLaunchRedesign, onLaunchEstimator }) {
               <Clock className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-white font-bold text-sm">15-Second AI Previews</div>
-              <div className="text-zinc-400 text-xs font-mono">Zero-Obligation Staging</div>
+              <div className="text-white font-bold text-sm">Free AI Concepts</div>
+              <div className="text-zinc-400 text-xs font-mono">Style Inspiration Only</div>
             </div>
           </div>
 
@@ -82,8 +82,8 @@ export function Hero({ client, onLaunchRedesign, onLaunchEstimator }) {
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-white font-bold text-sm">100% Fixed Quote</div>
-              <div className="text-zinc-400 text-xs font-mono">Zero Surprise Overages</div>
+              <div className="text-white font-bold text-sm">No-Obligation Consult</div>
+              <div className="text-zinc-400 text-xs font-mono">Free Concept First</div>
             </div>
           </div>
         </div>
