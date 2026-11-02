@@ -21,16 +21,17 @@ export function OnboardingModal({ isOpen, onClose, onClientCreated }) {
       id: slug,
       name: firmName,
       city: city || 'Metropolitan Area',
-      phone: phone || '+1 (800) 555-0199',
-      whatsapp: whatsapp || phone.replace(/[^0-9]/g, '') || '18005550199',
-      email: `concierge@${slug}.com`,
+      phone: phone || '',
+      whatsapp: whatsapp || phone.replace(/[^0-9]/g, '') || '',
+      email: '',
       tagline: tagline,
-      heroHeadline: `Experience Your ${firmName} Space in Photorealistic 3D`,
-      heroSubheadline: `Premier architectural staging, custom millwork, and luxury renovation serving ${city || 'our local community'}.`,
-      badge: 'Licensed Design/Build Partner • 5.0 Star Houzz Rating',
-      projectsCompleted: '120+',
-      avgRating: '5.0',
-      featuredStyle: 'Japandi & Architectural Luxury'
+      heroHeadline: `Get a Free AI Design Concept from ${firmName}`,
+      heroSubheadline: `Design concepts, instant estimates and consultations serving ${city || 'our local community'}.`,
+      badge: 'New partner profile - sample content',
+      projectsCompleted: '',
+      avgRating: '',
+      featuredStyle: 'Japandi & Architectural Luxury',
+      isSample: true
     };
 
     // Save to localStorage for persistent local resolution
@@ -47,7 +48,7 @@ export function OnboardingModal({ isOpen, onClose, onClientCreated }) {
       client: slug,
       name: firmName,
       city: city || 'Your Local Area',
-      phone: phone || '+1 (800) 555-0199',
+      phone: phone || '',
       tagline: tagline
     });
     const url = `${window.location.origin}/?${params.toString()}`;

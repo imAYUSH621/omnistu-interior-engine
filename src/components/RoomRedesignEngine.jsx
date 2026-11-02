@@ -36,10 +36,10 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
   // Run the zero-cost architectural redesign
   const handleGenerate = async () => {
     setIsGenerating(true);
-    setGenerationStep('Analyzing room depth and structural planes...');
+    setGenerationStep('Preparing your design brief...');
     
-    setTimeout(() => setGenerationStep('Injecting custom millwork & PBR textures...'), 1200);
-    setTimeout(() => setGenerationStep('Calculating 2700K ambient ray-traced lighting...'), 2400);
+    setTimeout(() => setGenerationStep('Generating your concept image with AI...'), 1200);
+    setTimeout(() => setGenerationStep('Adding finishing touches...'), 2400);
 
     const result = await generateArchitecturalRedesign({
       roomType: selectedRoom.name,
@@ -97,10 +97,10 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
             <span>Interactive AI Staging Studio</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-extrabold font-display text-white tracking-tight">
-            See Your Space Transformed Before You Spend a Single Dollar
+            Get a Free AI Design Concept in Your Chosen Style
           </h2>
           <p className="mt-4 text-base sm:text-lg text-zinc-400 font-light">
-            Select a room template or upload your existing space. Choose a signature style from {client.name} and experience an instant 8K architectural render.
+            Select a sample room or upload a photo for reference, choose a signature style, and our AI generates a design concept - for inspiration and planning, not a literal preview of your room.
           </p>
         </div>
 
@@ -198,19 +198,19 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
               {isGenerating ? (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin text-brand-300" />
-                  <span>{generationStep || 'Synthesizing 3D Architectural Scene...'}</span>
+                  <span>{generationStep || 'Generating your concept image...'}</span>
                 </>
               ) : (
                 <>
                   <Sparkles className="w-4 h-4 text-amber-200" />
-                  <span>Generate Instant 3D Architectural Staging</span>
+                  <span>Generate My Free Design Concept</span>
                 </>
               )}
             </button>
 
             <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 pt-1">
-              <span>Zero-cost Pollinations AI Backend</span>
-              <span>100% Free Live Render</span>
+              <span>Free AI concept generation</span>
+              <span>For inspiration and planning only</span>
             </div>
 
           </div>
@@ -230,7 +230,7 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
               {/* After (Redesigned) Image */}
               <img
                 src={generatedImage || selectedRoom.fallbackRender}
-                alt="Transformed Luxury Space"
+                alt="AI design concept"
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none"
               />
 
@@ -258,10 +258,10 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
 
               {/* Badges on Viewport */}
               <div className="absolute top-4 left-4 px-3 py-1 rounded-lg bg-black/75 backdrop-blur-md text-[11px] font-mono text-zinc-200 border border-white/10">
-                RAW SPACE (BEFORE)
+                {customImage ? 'YOUR PHOTO (REFERENCE)' : 'SAMPLE ROOM (REFERENCE)'}
               </div>
               <div className="absolute top-4 right-4 px-3 py-1 rounded-lg bg-brand-500/90 backdrop-blur-md text-[11px] font-mono text-white border border-brand-400 font-semibold shadow-lg">
-                3D REDESIGN ({selectedStyle.name.toUpperCase()})
+                {isAiRendered ? `AI CONCEPT (${selectedStyle.name.toUpperCase()})` : 'SAMPLE PHOTO (AI BUSY)'}
               </div>
 
               {/* Loading Overlay */}
@@ -272,7 +272,7 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
                   </div>
                   <div className="text-center">
                     <div className="text-white font-semibold text-sm">{generationStep}</div>
-                    <div className="text-xs text-zinc-400 font-mono mt-1">Generating zero-cost architectural photorealism...</div>
+                    <div className="text-xs text-zinc-400 font-mono mt-1">Free AI generation can take up to a minute - thank you for waiting...</div>
                   </div>
                 </div>
               )}
@@ -295,7 +295,7 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
                 className="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-brand-500 hover:from-amber-400 hover:to-brand-400 text-black font-semibold flex items-center justify-center space-x-2 transition shadow-lg active:scale-95"
               >
                 <Lock className="w-3.5 h-3.5" />
-                <span>Unlock 4K Blueprints & Materials List</span>
+                <span>Get Full Concept Details & Free Consultation</span>
               </button>
             </div>
 

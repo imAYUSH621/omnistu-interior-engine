@@ -17,13 +17,13 @@ export function PortfolioShowcase({ client, onOpenLeadModal }) {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-500/15 border border-brand-500/30 text-brand-300 text-xs font-mono uppercase tracking-wider mb-4">
-            <span>Verified Architectural Case Studies</span>
+            <span>Sample Design Concepts</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-extrabold font-display text-white tracking-tight">
-            Curated Transformations by {client.name}
+            Sample Concepts & Style Gallery
           </h2>
           <p className="mt-4 text-base sm:text-lg text-zinc-400 font-light">
-            Flip between the raw original spaces and the final architectural transformations to inspect millwork, lighting, and stonework detailing.
+            Flip through sample concepts created with our design engine. Photos, locations, budgets and specs are illustrative samples - for inspiration and planning only.
           </p>
         </div>
 
@@ -53,7 +53,7 @@ export function PortfolioShowcase({ client, onOpenLeadModal }) {
                         ? 'bg-amber-950/80 text-amber-300 border-amber-500/40'
                         : 'bg-black/75 text-zinc-200 border-white/10'
                     }`}>
-                      {isShowingBefore ? 'RAW ORIGINAL (BEFORE)' : 'ARCHITECTURAL FINISH (AFTER)'}
+                      {isShowingBefore ? 'REFERENCE PHOTO' : 'STYLE CONCEPT'}
                     </span>
                   </div>
 

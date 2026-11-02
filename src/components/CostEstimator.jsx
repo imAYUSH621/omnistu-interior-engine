@@ -61,7 +61,7 @@ export function CostEstimator({ client, onOpenLeadModal }) {
             Calculate Your Renovation Investment in Real Time
           </h2>
           <p className="mt-4 text-base sm:text-lg text-zinc-400 font-light">
-            No surprise overages or hidden markups. Model your project scope and receive an instant, calibrated investment band based on {client.name}’s verified delivery metrics.
+            Model your project scope and receive an instant, illustrative investment band to start the conversation - final quotes come after a real consultation.
           </p>
         </div>
 
@@ -160,7 +160,7 @@ export function CostEstimator({ client, onOpenLeadModal }) {
             <div className="flex items-center justify-between pb-4 border-b border-zinc-800">
               <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Estimated Investment Band</span>
               <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
-                100% FIXED QUOTE GUARANTEE
+                ILLUSTRATIVE ESTIMATE
               </span>
             </div>
 
@@ -234,7 +234,7 @@ export function CostEstimator({ client, onOpenLeadModal }) {
               })}
               className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-sm tracking-wide shadow-xl shadow-brand-500/25 transition active:scale-95 flex items-center justify-center space-x-2"
             >
-              <span>Download Itemized Cost Blueprint</span>
+              <span>Get Itemized Estimate & Free Consult</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 

@@ -13,7 +13,12 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  // Optional lead delivery endpoint (e.g. Web3Forms / Formspree) and demo WhatsApp,
+  // injected at build time. Empty = leads stay on the visitor's device only.
+  const leadEndpoint = (import.meta.env && import.meta.env.VITE_LEAD_ENDPOINT) || '';
+  const whatsappNumber = client.whatsapp || (import.meta.env && import.meta.env.VITE_DEMO_WHATSAPP) || '';
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
 
@@ -34,11 +39,24 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
       // Non-blocking fallback
     }
 
+    // Deliver to the configured endpoint when one is set (build-time env)
+    if (leadEndpoint) {
+      try {
+        await fetch(leadEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(newLead)
+        });
+      } catch {
+        // Delivery failure is non-blocking; the visitor still gets direct contact options
+      }
+    }
+
     setSubmitted(true);
   };
 
   const whatsappMessage = encodeURIComponent(
-    `Hello ${client.name}, I am ${formData.name || 'a homeowner'} in ${client.city}. I just generated an interactive 3D remodel concept for my ${contextData?.room || 'home'} (${contextData?.budget || 'Custom Scope'}). I'd like to review the 4K architectural blueprints and schedule a consultation.`
+    `Hello ${client.name}, I am ${formData.name || 'a homeowner'} in ${client.city}. I just generated a free AI design concept for my ${contextData?.room || 'home'} (${contextData?.budget || 'Custom Scope'}). I'd like to discuss my project and schedule a consultation.`
   );
 
   return (
@@ -60,11 +78,11 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
             </div>
             
             <h3 className="text-2xl font-bold font-display text-white tracking-tight">
-              Unlock 4K Blueprints & Itemized Scope
+              Get Your Full Concept & Free Consultation
             </h3>
             
             <p className="text-xs text-zinc-400 mt-2">
-              Enter your details to receive the high-resolution architectural specification list and lock in your complimentary 30-minute design consultation.
+              Enter your details and the team will follow up with your full concept details and a free design consultation.
             </p>
 
             {contextData && (
@@ -144,7 +162,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
                 type="submit"
                 className="w-full py-3.5 mt-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-xs tracking-wider uppercase transition shadow-xl shadow-brand-500/25 active:scale-95"
               >
-                Send Blueprint & Priority Access
+                Request My Free Consultation
               </button>
             </form>
 
@@ -161,30 +179,34 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
 
             <div>
               <h3 className="text-2xl font-bold font-display text-white">
-                Blueprint Sent Successfully!
+                Request Received!
               </h3>
               <p className="text-xs text-zinc-300 mt-2 max-w-sm mx-auto leading-relaxed">
-                Thank you, <span className="font-semibold text-white">{formData.name}</span>. Senior Designer at <span className="text-brand-300">{client.name}</span> has received your room specifications.
+                Thank you, <span className="font-semibold text-white">{formData.name}</span>. The <span className="text-brand-300">{client.name}</span> team has received your request and will follow up shortly.
               </p>
             </div>
 
+            {(whatsappNumber || client.phone) && (
             <div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 text-left space-y-3">
               <div className="text-xs font-mono uppercase tracking-wider text-zinc-400">
                 Instant Speed-to-Lead Direct Options:
               </div>
 
               {/* Direct WhatsApp Action */}
+              {whatsappNumber && (
               <a
-                href={`https://wa.me/${client.whatsapp}?text=${whatsappMessage}`}
+                href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center justify-center space-x-2 transition shadow-lg"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>Chat Instantly on WhatsApp With Senior Designer</span>
+                <span>Chat Instantly on WhatsApp With the Team</span>
               </a>
+              )}
 
               {/* Call Directly */}
+              {client.phone && (
               <a
                 href={`tel:${client.phone}`}
                 className="w-full py-2.5 px-4 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs flex items-center justify-center space-x-2 transition"
@@ -192,7 +214,9 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
                 <Phone className="w-3.5 h-3.5 text-brand-400" />
                 <span>Call Studio Desk: {client.phone}</span>
               </a>
+              )}
             </div>
+            )}
 
             <button
               onClick={onClose}
