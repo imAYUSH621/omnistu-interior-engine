@@ -7,6 +7,10 @@ export const PRESET_CLIENTS = {
     city: 'Orlando & South Florida',
     phone: '',
     whatsapp: '',
+  web3formsKey: '',
+  calLink: '',
+    web3formsKey: '', // Web3Forms access key for native lead delivery; empty = lead delivery inactive
+    calLink: '', // Cal.com hosted booking link (user/event-type); empty = booking embed inactive
     email: '',
     tagline: 'Premier Full-Home Renovation & Architectural Climate Comfort',
     heroHeadline: 'Experience Your Home Reimagined in Photorealistic 3D',
@@ -24,6 +28,10 @@ export const PRESET_CLIENTS = {
     city: 'Manhattan & The Hamptons, NY',
     phone: '',
     whatsapp: '',
+  web3formsKey: '',
+  calLink: '',
+    web3formsKey: '', // Web3Forms access key for native lead delivery; empty = lead delivery inactive
+    calLink: '', // Cal.com hosted booking link (user/event-type); empty = booking embed inactive
     email: '',
     tagline: 'High-Concept Residential & Penthouse Interior Architecture',
     heroHeadline: 'Bespoke Interior Architecture for Discerning Homeowners',
@@ -41,6 +49,10 @@ export const PRESET_CLIENTS = {
     city: 'Austin & Dallas, TX',
     phone: '',
     whatsapp: '',
+  web3formsKey: '',
+  calLink: '',
+    web3formsKey: '', // Web3Forms access key for native lead delivery; empty = lead delivery inactive
+    calLink: '', // Cal.com hosted booking link (user/event-type); empty = booking embed inactive
     email: '',
     tagline: 'Turnkey Architectural Design, Custom Millwork & Whole-Home Remodeling',
     heroHeadline: 'Instant 3D Architectural Remodel Before You Break Ground',
@@ -58,6 +70,10 @@ export const PRESET_CLIENTS = {
     city: 'Los Angeles & Beverly Hills, CA',
     phone: '',
     whatsapp: '',
+  web3formsKey: '',
+  calLink: '',
+    web3formsKey: '', // Web3Forms access key for native lead delivery; empty = lead delivery inactive
+    calLink: '', // Cal.com hosted booking link (user/event-type); empty = booking embed inactive
     email: '',
     tagline: 'Quiet Luxury, Natural Stone & Calibrated Architectural Lighting',
     heroHeadline: 'Turn Your Space into a Serene Architectural Oasis',
@@ -77,6 +93,8 @@ export const DEFAULT_CLIENT = {
   city: 'Your City',
   phone: '',
   whatsapp: '',
+  web3formsKey: '',
+  calLink: '',
   email: '',
   tagline: 'AI interior design concepts, instant estimates and client demos',
   heroHeadline: 'Get a Free AI Design Concept for Your Space',

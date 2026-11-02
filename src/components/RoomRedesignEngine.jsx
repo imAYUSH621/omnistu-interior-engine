@@ -70,6 +70,9 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
     stepTimers.current = [];
     setGeneratedImage(result.imageUrl);
     setIsAiRendered(result.isAiGenerated);
+    // The probe is advisory; the real attempt is the truth. A failed attempt
+    // flips the UI to the honest sample-mode for the rest of the session.
+    setAiStatus(result.isAiGenerated ? 'available' : 'unavailable');
     setIsGenerating(false);
     setGenerationStep('');
     setSliderPosition(50);
