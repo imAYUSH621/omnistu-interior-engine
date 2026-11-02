@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, CheckCircle, MessageCircle, ArrowRight, ShieldCheck, Phone, Mail, User, Clock } from 'lucide-react';
+import { CalEmbed } from './CalEmbed';
 
 export function LeadModal({ isOpen, onClose, client, contextData }) {
   const [formData, setFormData] = useState({
@@ -14,11 +15,14 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
 
   if (!isOpen) return null;
 
-  // Optional lead delivery endpoint (e.g. Web3Forms / Formspree) and demo WhatsApp,
-  // injected at build time. Empty = leads stay on the visitor's device only.
+  // Native premade integrations, configured per client (or build-time env for
+  // the operator's own demo). Empty = that path stays inactive and the UI says
+  // so honestly. No account or destination is assumed.
+  const web3formsKey = client.web3formsKey || (import.meta.env && import.meta.env.VITE_WEB3FORMS_KEY) || '';
   const leadEndpoint = (import.meta.env && import.meta.env.VITE_LEAD_ENDPOINT) || '';
   const whatsappNumber = client.whatsapp || (import.meta.env && import.meta.env.VITE_DEMO_WHATSAPP) || '';
   const bookingUrl = (import.meta.env && import.meta.env.VITE_BOOKING_URL) || '';
+  const calLink = client.calLink || (import.meta.env && import.meta.env.VITE_CAL_LINK) || '';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,9 +45,38 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
       // Non-blocking fallback
     }
 
-    // Deliver to the configured endpoint when one is set (build-time env).
-    // Success is only claimed on actual durable receipt.
-    if (leadEndpoint) {
+    // Deliver through the configured channel. Success is only claimed on
+    // actual confirmed receipt by the provider.
+    if (web3formsKey) {
+      // Native Web3Forms API (https://docs.web3forms.com/getting-started/api-reference):
+      // POST access_key + fields; receipt confirmed only by success === true.
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: web3formsKey,
+            subject: `New consultation request - ${client.name}`,
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            message: [
+              `Timeline: ${formData.timeline}`,
+              formData.notes ? `Notes: ${formData.notes}` : '',
+              contextData && contextData.room ? `Room: ${contextData.room}` : '',
+              contextData && contextData.style ? `Style: ${contextData.style}` : '',
+              contextData && contextData.budget ? `Est: ${contextData.budget}` : '',
+            ].filter(Boolean).join('\n'),
+            botcheck: '',
+          })
+        });
+        const data = res && typeof res.json === 'function' ? await res.json().catch(() => null) : null;
+        const accepted = !!(res && res.ok && data && data.success === true);
+        setDelivery(accepted ? 'sent' : 'failed');
+      } catch {
+        setDelivery('failed');
+      }
+    } else if (leadEndpoint) {
       try {
         const res = await fetch(leadEndpoint, {
           method: 'POST',
@@ -205,7 +238,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
               </p>
             </div>
 
-            {(whatsappNumber || client.phone || bookingUrl) && (
+            {(whatsappNumber || client.phone || bookingUrl || calLink) && (
             <div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 text-left space-y-3">
               <div className="text-xs font-mono uppercase tracking-wider text-zinc-400">
                 Instant Speed-to-Lead Direct Options:
@@ -235,8 +268,15 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
               </a>
               )}
 
+              {/* Native Cal.com hosted booking embed (only when configured) */}
+              {calLink && (
+              <div className="rounded-xl overflow-hidden border border-zinc-800 bg-zinc-950 p-2">
+                <CalEmbed calLink={calLink} />
+              </div>
+              )}
+
               {/* Booking link (only when a real scheduler URL is configured) */}
-              {bookingUrl && (
+              {!calLink && bookingUrl && (
               <a
                 href={bookingUrl}
                 target="_blank"

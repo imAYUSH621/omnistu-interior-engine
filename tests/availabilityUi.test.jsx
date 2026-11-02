@@ -67,3 +67,27 @@ describe('Availability-aware engine UI', () => {
     expect(screen.queryByText(/AI CONCEPT \(/i)).toBeNull();
   });
 });
+
+describe('Probe is advisory: real outcomes self-correct the UI', () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it('probe says up but generation fails -> UI flips to honest sample mode', async () => {
+    checkGeneratorAvailability.mockResolvedValue(true);
+    generateArchitecturalRedesign.mockResolvedValue({
+      success: true,
+      imageUrl: 'https://images.unsplash.com/fallback',
+      isAiGenerated: false,
+      note: 'fallback'
+    });
+    render(<RoomRedesignEngine client={client} onOpenLeadModal={() => {}} />);
+
+    await waitFor(() => screen.getByText(/Generate My Free Design Concept/i));
+    fireEvent.click(screen.getByText(/Generate My Free Design Concept/i));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Show Style Concept \(Sample Render\)/i)).toBeDefined();
+    });
+    expect(screen.getByText(/free AI generator is busy right now/i)).toBeDefined();
+    expect(screen.getByText(/SAMPLE PHOTO \(AI BUSY\)/i)).toBeDefined();
+  });
+});
