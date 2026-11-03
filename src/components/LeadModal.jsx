@@ -298,7 +298,11 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
               </h3>
               <p className="text-xs text-zinc-300 mt-2 max-w-sm mx-auto leading-relaxed">
                 {delivery === 'sent' ? (
-                  <>Thank you, <span className="font-semibold text-white">{formData.name}</span>. The delivery service has accepted your request for <span className="text-brand-300">{client.name}</span>. Acceptance by the service is not confirmation that the studio team has seen it yet - they follow up from their inbox.{demoEndpointActive && <> Delivered to demo destination <span className="font-mono text-amber-200">{demoEndpointHost}</span> (a test sink from the shared link, not the studio's CRM).</>} </>
+                  demoEndpointActive ? (
+                    <>Thank you, <span className="font-semibold text-white">{formData.name}</span>. Your test enquiry was delivered to the demo destination <span className="font-mono text-amber-200">{demoEndpointHost}</span> - a test sink from the shared link, not the studio's CRM. This sample studio has no team, so nobody will contact you from this demo.</>
+                  ) : (
+                  <>Thank you, <span className="font-semibold text-white">{formData.name}</span>. The delivery service has accepted your request for <span className="text-brand-300">{client.name}</span>. Acceptance by the service is not confirmation that the studio team has seen it yet - they follow up from their inbox.</>
+                  )
                 ) : delivery === 'failed' ? (
                   <>Sorry, <span className="font-semibold text-white">{formData.name}</span> - your request could not be delivered just now. Please use the direct contact options below.</>
                 ) : (
@@ -307,11 +311,17 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
               </p>
               {delivery === 'sent' && crmSync && (
                 <p className="text-[11px] font-mono text-zinc-500">
-                  {crmSync === 'synced'
-                    ? 'CRM handoff: accepted by the configured CRM endpoint.'
-                    : crmSync === 'failed'
-                      ? 'CRM handoff failed - your request was still accepted by the delivery service above.'
-                      : 'CRM handoff: not configured for this studio yet.'}
+                  {demoEndpointActive
+                    ? (crmSync === 'synced'
+                        ? 'Handoff: accepted by the demo test endpoint (not a CRM).'
+                        : crmSync === 'failed'
+                          ? 'Demo handoff endpoint failed - your test enquiry was still accepted by the delivery service above.'
+                          : 'Handoff endpoint: not configured in this demo link.')
+                    : (crmSync === 'synced'
+                        ? 'CRM handoff: accepted by the configured CRM endpoint.'
+                        : crmSync === 'failed'
+                          ? 'CRM handoff failed - your request was still accepted by the delivery service above.'
+                          : 'CRM handoff: not configured for this studio yet.')}
                 </p>
               )}
             </div>

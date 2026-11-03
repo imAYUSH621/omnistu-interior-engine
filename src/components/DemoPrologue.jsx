@@ -1,0 +1,95 @@
+import React from 'react';
+import { X, Sparkles, Calculator, Inbox, CalendarCheck, Play, Compass } from 'lucide-react';
+
+// First-visit explanation for prospects (interior business owners) who open a
+// demo link cold. Shown only for sample profiles, never for a real configured
+// client and never inside the embed widget. Every claim maps to a working
+// flow on the page; nothing here promises results, ROI or integrations that
+// are not demonstrated.
+const FLOWS = [
+  {
+    icon: Sparkles,
+    title: 'AI design concepts',
+    benefit: 'A visitor picks a style and gets a real AI-generated concept in seconds - the hook that turns a casual browser into an engaged prospect.'
+  },
+  {
+    icon: Calculator,
+    title: 'Instant scope & budget',
+    benefit: 'They answer a few questions and see an itemized estimate range - so the enquiry that reaches you is pre-qualified, not cold.'
+  },
+  {
+    icon: Inbox,
+    title: 'Enquiries that reach you',
+    benefit: 'Every enquiry arrives structured - name, phone, timeline, budget context - delivered to your inbox and CRM, not lost in DMs.'
+  },
+  {
+    icon: CalendarCheck,
+    title: 'Direct consultation booking',
+    benefit: 'A serious prospect books a consultation slot from the same flow, while the intent is still hot.'
+  }
+];
+
+export function DemoPrologue({ isOpen, onClose, onStartTour, client }) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl p-6 sm:p-8">
+        <button
+          onClick={onClose}
+          aria-label="Close demo introduction"
+          className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-900 transition"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        <p className="text-[11px] font-mono uppercase tracking-widest text-brand-300">
+          Live product demo • for interior design businesses
+        </p>
+        <h2 className="mt-2 text-2xl sm:text-3xl font-bold font-display text-white tracking-tight">
+          Watch a visitor become a qualified enquiry
+        </h2>
+        <p className="mt-3 text-sm text-zinc-300 leading-relaxed">
+          You are looking at the Omnistu engine running as a sample studio, <span className="text-brand-300">{client.name}</span>.
+          Everything on the page works - click through it exactly as your customer would.
+          This is what your website does for your business:
+        </p>
+
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {FLOWS.map(({ icon: Icon, title, benefit }) => (
+            <div key={title} className="p-4 rounded-xl bg-zinc-900/70 border border-zinc-800">
+              <div className="flex items-center space-x-2">
+                <Icon className="w-4 h-4 text-brand-400" />
+                <h3 className="text-sm font-semibold text-white">{title}</h3>
+              </div>
+              <p className="mt-2 text-xs text-zinc-400 leading-relaxed">{benefit}</p>
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-5 text-[11px] font-mono text-zinc-500 leading-relaxed border-t border-zinc-800/80 pt-4">
+          Honest boundaries: this is a sample studio with sample data - not a real business.
+          Test enquiries are clearly labeled, and nothing here claims to be connected to a real inbox or CRM.
+          In a live setup each piece is connected to your own accounts and verified with you.
+        </p>
+
+        <div className="mt-6 flex flex-col sm:flex-row gap-3">
+          <button
+            onClick={onStartTour}
+            className="flex-1 py-3 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-xs tracking-wider uppercase transition shadow-xl shadow-brand-500/25 active:scale-95 flex items-center justify-center space-x-2"
+          >
+            <Play className="w-4 h-4" />
+            <span>Start the guided tour</span>
+          </button>
+          <button
+            onClick={onClose}
+            className="flex-1 py-3 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-zinc-200 font-semibold text-xs tracking-wider uppercase transition active:scale-95 flex items-center justify-center space-x-2"
+          >
+            <Compass className="w-4 h-4" />
+            <span>Explore on my own</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
