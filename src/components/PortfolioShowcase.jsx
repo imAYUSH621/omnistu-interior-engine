@@ -36,7 +36,7 @@ export function PortfolioShowcase({ client, onOpenLeadModal }) {
             return (
               <div
                 key={item.id}
-                className="bg-zinc-950/80 rounded-2xl border border-zinc-800/80 overflow-hidden shadow-2xl flex flex-col group hover:border-zinc-700 transition-all duration-300"
+                className="bg-zinc-950/80 rounded-2xl border border-zinc-800/80 overflow-hidden shadow-2xl flex flex-col group hover:border-brand-500/50 hover:shadow-[0_18px_50px_-14px_rgba(163,132,97,0.35)] hover:-translate-y-1 transition-all duration-300"
               >
                 {/* Visual Viewport */}
                 <div className="relative aspect-[16/10] overflow-hidden bg-zinc-900">

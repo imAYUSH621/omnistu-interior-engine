@@ -63,7 +63,7 @@ export function CostEstimator({ client, onOpenLeadModal }) {
   const labor = Math.round(lowEstimate * 0.30);
 
   return (
-    <section id="cost-estimator" className="py-20 bg-zinc-950 border-b border-white/5 relative">
+    <section id="cost-estimator" className="py-20 bg-gradient-to-b from-zinc-950 via-[#100e0b] to-zinc-950 border-b border-white/5 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}

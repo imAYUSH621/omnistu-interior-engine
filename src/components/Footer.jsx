@@ -3,7 +3,7 @@ import { Phone, Mail, MapPin, ShieldCheck, Heart } from 'lucide-react';
 
 export function Footer({ client }) {
   return (
-    <footer className="bg-black border-t border-zinc-900 py-16 text-zinc-400 text-xs font-sans">
+    <footer className="bg-gradient-to-b from-[#0e0d0b] to-black border-t border-brand-900/40 py-16 text-zinc-400 text-xs font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-zinc-900">
