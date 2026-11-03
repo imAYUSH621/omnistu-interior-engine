@@ -66,12 +66,29 @@ Each client profile in `src/data/clients.js` can carry:
 
 ## 4. Link-configured live demo (no rebuild)
 
-Append `?leadEndpoint=URL` (and optionally `&crmWebhook=URL`) to any engine
-link to point the enquiry form and CRM handoff at a real endpoint for a
-demo - e.g. a free webhook sink - without rebuilding. The destination host
-is shown to the visitor in the form. No secrets belong in these URLs: use
-them only with endpoints that accept unauthenticated POSTs, and only with
-demo data until the client's real data handling is approved.
+For a live demo, the presenter can point the enquiry form and CRM handoff
+at a real endpoint - e.g. a free webhook sink - without rebuilding:
+
+    ?demoMode=endpoints&leadEndpoint=URL&crmWebhook=URL   (crmWebhook optional)
+
+Guardrails, enforced in the UI:
+
+- `demoMode=endpoints` is required. Endpoint params in a shared link alone
+  are ignored - a forwarded link can never silently redirect a visitor's
+  contact details to an arbitrary destination. Production delivery stays
+  with trusted config (per-client profile or build-time env), never the URL.
+- The form shows a prominent warning before any entry: demo delivery is
+  active, the destination host is named, and visitors are told to enter
+  fake/sample details only.
+- The submit button stays disabled until the visitor ticks an explicit
+  consent box acknowledging the details are fake/sample and naming the
+  destination host.
+- The "Zero-Spam Privacy Invariant - Direct to Lead Designer" line is
+  replaced by honest demo-delivery copy while this mode is active.
+
+No secrets belong in these URLs: use them only with endpoints that accept
+unauthenticated cross-origin POSTs, and only with demo data until the
+client's real data handling is approved.
 
 ## 5. Honesty notes
 

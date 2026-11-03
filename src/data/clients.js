@@ -108,6 +108,20 @@ export function getModules(client) {
   return merged;
 }
 
+
+// Static hosting platform domains: a subdomain there is the deploy account,
+// not a client brand, so the engine falls back to the Omnistu sample profile
+// instead of synthesizing one from the account name.
+const PLATFORM_DEMO_HOSTS = [
+  'github.io', 'pages.dev', 'netlify.app', 'vercel.app',
+  'web.app', 'firebaseapp.com', 'surge.sh', 'onrender.com'
+];
+
+export function isPlatformDemoHost(hostname) {
+  const h = (hostname || '').toLowerCase();
+  return PLATFORM_DEMO_HOSTS.some(d => h === d || h.endsWith('.' + d));
+}
+
 export const DEFAULT_CLIENT = {
   id: 'omnistu-demo',
   name: 'Omnistu Interior Studio',
