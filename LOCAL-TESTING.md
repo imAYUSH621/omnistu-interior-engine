@@ -38,3 +38,24 @@ credential handling, price bands, consultation policy and conflict handling.
 Keep booking slots unavailable until approved. 'Hidden' only removes a Cal.com
 link from its profile. Production hosting is not part of running these tests.
 GitHub Pages must not be republished under the current owner instruction.
+
+## Executable activation gate
+
+```sh
+npm run check:client -- examples/clients/existing-site-pilot.json
+npm run check:client -- examples/clients/full-site-pilot.json
+```
+
+Both samples intentionally exit 1 (NOT ready). Copy a sample, choose modules
+for the client and record only acceptance evidence actually verified. The gate
+prints configured versus verified separately and exits 0 only when all selected
+modules and base hosting/content/privacy/email gates pass. It never deploys,
+sends or stores a secret. No API keys belong in the evidence JSON.
+
+The existing-site sample doesn't force a replacement website, CRM, booking,
+estimator or portfolio onto a business that doesn't need them. The full-site
+sample shows their additional activation requirements. An operator can lie in
+the evidence flags; this tool is a checklist, NOT an independent service audit.
+
+CRM has its own `modules.crm` switch now, so email delivery can stay enabled
+while CRM handoff stays disabled, even if an old endpoint is still configured.

@@ -1,0 +1,8 @@
+{
+  "client": {
+    "id": "sample-full-site", "name": "Sample Full Studio", "isSample": true,
+    "web3formsKey": "", "crmWebhookUrl": "", "calLink": "", "whatsapp": "",
+    "modules": { "aiStudio": true, "estimator": true, "portfolio": true, "crm": true, "booking": true, "whatsapp": false }
+  },
+  "evidence": {}
+}

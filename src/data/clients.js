@@ -194,6 +194,7 @@ export const DEFAULT_MODULES = {
   estimator: true,  // Scope & investment estimator
   portfolio: true,  // Portfolio showcase
   whatsapp: true,   // WhatsApp speed-to-lead inside the enquiry flow
+  crm: true,        // Optional configured CRM handoff, independently switchable
   booking: true,    // Consultation booking (Cal.com hosted embed) inside the enquiry flow
 };
 
