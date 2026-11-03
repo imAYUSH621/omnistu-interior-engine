@@ -6,7 +6,7 @@ import { DemoGuide } from '../src/components/DemoGuide';
 import { OwnerInbox } from '../src/components/OwnerInbox';
 import { DEFAULT_CLIENT } from '../src/data/clients';
 
-const sampleClient = DEFAULT_CLIENT; // isSample: true
+const sampleClient = { ...DEFAULT_CLIENT, web3formsKey: '' }; // isSample: true, keyless sample studio
 
 describe('Prospect demo prologue', () => {
   it('explains what the demo does and why it benefits the studio, with honest boundaries', () => {
@@ -32,6 +32,13 @@ describe('Prospect demo prologue', () => {
     expect(screen.getByText(/In a live setup the same enquiry is delivered to your business email and CRM automatically/i)).toBeDefined();
     // The tools that do work are stated as working
     expect(screen.getByText(/The design and estimate tools really work/i)).toBeDefined();
+  });
+
+  it('describes real delivery to the Omnistu inbox when the master demo key is present', () => {
+    render(<DemoPrologue isOpen={true} onClose={() => {}} onStartTour={() => {}} client={DEFAULT_CLIENT} />);
+    expect(screen.getByText(/really is emailed to the Omnistu team inbox/i)).toBeDefined();
+    expect(screen.getByText(/really arrive in Omnistu’s own team inbox/i)).toBeDefined();
+    expect(screen.queryByText(/nothing here claims to be connected to a real inbox or CRM/i)).toBeNull();
   });
 
   it('starts the guided tour from the primary action', () => {

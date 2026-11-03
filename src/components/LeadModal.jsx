@@ -282,7 +282,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
             ) : (
               <div className="mt-4 flex items-center justify-center space-x-2 text-[11px] font-mono text-zinc-500">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Zero-Spam Privacy Invariant • Direct to Lead Designer</span>
+                <span>{web3formsKey ? 'Delivered by email to the studio team inbox' : 'Zero-Spam Privacy Invariant • Direct to Lead Designer'}</span>
               </div>
             )}
           </div>
