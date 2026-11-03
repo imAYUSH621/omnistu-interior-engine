@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Sparkles, ArrowRight, CheckCircle2, ShieldCheck, Clock, Award } from 'lucide-react';
 import { checkGeneratorAvailability } from '../services/imageGenerator';
 
-export function Hero({ client, onLaunchRedesign, onLaunchEstimator }) {
+export function Hero({ client, modules, onLaunchRedesign, onLaunchEstimator }) {
+  const showRedesign = !modules || modules.aiStudio !== false;
+  const showEstimator = !modules || modules.estimator !== false;
   // The free AI endpoint is best-effort; do not promise AI output when the
   // cached probe already knows only the sample path is available.
   const [aiDown, setAiDown] = useState(false);
@@ -39,6 +41,7 @@ export function Hero({ client, onLaunchRedesign, onLaunchEstimator }) {
 
         {/* Primary & Secondary Dual CTAs */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto sm:max-w-none">
+          {showRedesign && (
           <button
             onClick={onLaunchRedesign}
             className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-base shadow-xl shadow-brand-500/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center space-x-3 group"
@@ -47,13 +50,16 @@ export function Hero({ client, onLaunchRedesign, onLaunchEstimator }) {
             <span>{aiDown ? 'Browse Design Concepts' : 'Launch Free AI Design Concept'}</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
+          )}
 
+          {showEstimator && (
           <button
             onClick={onLaunchEstimator}
             className="w-full sm:w-auto px-7 py-4 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700/80 text-zinc-200 font-medium text-base transition-all hover:border-zinc-500 flex items-center justify-center space-x-2"
           >
             <span>Calculate Project Scope & Budget</span>
           </button>
+          )}
         </div>
 
         {/* Social Proof & Value Invariants */}
