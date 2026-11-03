@@ -10,7 +10,8 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "build:pages": "vite build --base=/omnistu-interior-engine/",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "check:client": "node scripts/check-client.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.475.0",

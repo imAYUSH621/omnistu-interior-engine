@@ -1,0 +1,8 @@
+{
+  "client": {
+    "id": "sample-existing-site", "name": "Sample Existing Studio", "isSample": true,
+    "web3formsKey": "", "crmWebhookUrl": "", "calLink": "", "whatsapp": "",
+    "modules": { "aiStudio": true, "estimator": false, "portfolio": false, "crm": false, "booking": false, "whatsapp": false }
+  },
+  "evidence": {}
+}

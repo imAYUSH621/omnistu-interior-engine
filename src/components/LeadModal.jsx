@@ -114,7 +114,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
         setDelivery(accepted ? 'sent' : 'failed');
         if (accepted) {
           trackEvent(client, 'enquiry_submitted');
-          setCrmSync(await handoffLeadToCrm({ endpoint: crmWebhookOverride || client.crmWebhookUrl, lead: newLead }));
+          setCrmSync(modules.crm ? await handoffLeadToCrm({ endpoint: crmWebhookOverride || client.crmWebhookUrl, lead: newLead }) : 'skipped');
         }
       } catch {
         setDelivery('failed');
@@ -136,7 +136,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
         setDelivery(accepted ? 'sent' : 'failed');
         if (accepted) {
           trackEvent(client, 'enquiry_submitted');
-          setCrmSync(await handoffLeadToCrm({ endpoint: crmWebhookOverride || client.crmWebhookUrl, lead: newLead }));
+          setCrmSync(modules.crm ? await handoffLeadToCrm({ endpoint: crmWebhookOverride || client.crmWebhookUrl, lead: newLead }) : 'skipped');
         }
       } catch {
         setDelivery('failed');

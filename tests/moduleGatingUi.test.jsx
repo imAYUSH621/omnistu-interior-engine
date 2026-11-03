@@ -53,6 +53,15 @@ describe('Client-dependent module gating in the enquiry flow', () => {
     expect(urls).toContain('https://crm.example/hook');
   });
 
+  it('does not post to an existing CRM when that module is disabled', async () => {
+    vi.stubEnv('VITE_LEAD_ENDPOINT', 'https://example.com/hook');
+    global.fetch = vi.fn().mockResolvedValue({ ok: true });
+    render(<LeadModal isOpen={true} onClose={() => {}} client={{ ...base, crmWebhookUrl: 'https://crm.example/hook', modules: { crm: false } }} contextData={{}} />);
+    submitDemo();
+    expect(await screen.findByText(/Request Accepted by Delivery Service/i)).toBeDefined();
+    expect(global.fetch.mock.calls.map(c=>c[0])).not.toContain('https://crm.example/hook');
+  });
+
   it('keeps CRM failure distinct from inbox delivery', async () => {
     vi.stubEnv('VITE_LEAD_ENDPOINT', 'https://example.com/hook');
     const client = { ...base, crmWebhookUrl: 'https://crm.example/hook' };
