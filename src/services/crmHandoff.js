@@ -34,7 +34,9 @@ export async function handoffLeadToCrm({ endpoint, lead, fetchImpl }) {
         lead,
       }),
     });
-    return res && res.ok ? 'synced' : 'failed';
+    if (!res?.ok) return 'failed';
+    const result = typeof res.json === 'function' ? await res.json().catch(() => null) : null;
+    return result && (result.ok === false || result.success === false) ? 'failed' : 'synced';
   } catch {
     return 'failed';
   }

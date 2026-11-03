@@ -39,3 +39,16 @@ Note: Vercel Hobby is restricted to non-commercial use
 - Preset clients are marked sample profiles with no real contact details.
 - `?view=embed` renders the studio as an embeddable widget for clients who
   already have a website (see EMBED.md).
+
+## Current demonstration versus commercial release
+
+The existing GitHub Pages deployment is a sample demonstration, not the
+commercial client hosting plan. GitHub explicitly limits using Pages to run
+an online business or a site primarily facilitating commercial transactions:
+https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits
+
+Migrate to a verified commercial-permitted host before production client use.
+Check Cloudflare account/terms and final limits before deployment, rather than
+relying on an old price claim. Do not enable booking until owner-approved
+hours/duration/medium and conflict policy are grounded. Actual CRM creation,
+privacy/retention, licensed assets, and client acceptance remain release gates.

@@ -65,6 +65,18 @@ describe('Link-configured demo endpoints', () => {
     expect(urls).toContain('https://crm.example/hook');
   });
 
+  it('gates a CRM-only link override even when trusted email delivery is configured', async () => {
+    setSearch('?crmWebhook=https://other-crm.example/hook&demoMode=endpoints');
+    global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ success: true }) });
+    render(<LeadModal isOpen={true} onClose={() => {}} client={{ ...liveClient, web3formsKey: 'test-key' }} contextData={{}} />);
+    fillForm(); submit();
+    expect(global.fetch).not.toHaveBeenCalled();
+    expect(screen.getAllByText(/other-crm.example/).length).toBeGreaterThan(0);
+    giveDemoConsent(); submit();
+    expect(await screen.findByText(/Request Accepted by Delivery Service/i)).toBeDefined();
+    expect(global.fetch).toHaveBeenCalledWith('https://other-crm.example/hook', expect.anything());
+  });
+
   it('ignores link-supplied endpoints without explicit demo mode: nothing is sent to them', async () => {
     setSearch('?leadEndpoint=https://sink.example/hook&crmWebhook=https://crm.example/hook');
     global.fetch = vi.fn().mockResolvedValue({ ok: true });

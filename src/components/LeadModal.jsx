@@ -49,10 +49,10 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
   const demoMode = linkParams.get('demoMode') === 'endpoints';
   const leadEndpoint = (demoMode ? leadEndpointParam : '') || (import.meta.env && import.meta.env.VITE_LEAD_ENDPOINT) || '';
   const crmWebhookOverride = demoMode ? crmWebhookParam : '';
-  const demoEndpointActive = demoMode && !!leadEndpointParam;
-  const demoEndpointHost = (() => {
-    try { return new URL(leadEndpointParam || crmWebhookParam).host; } catch { return 'the link-supplied endpoint'; }
-  })();
+  const demoEndpointActive = demoMode && !!(leadEndpointParam || crmWebhookParam);
+  const demoEndpointHost = [...new Set([leadEndpointParam, crmWebhookParam].filter(Boolean).map(value => {
+    try { return new URL(value).host; } catch { return 'invalid destination'; }
+  }))].join(' and ');
   const whatsappNumber = client.whatsapp || (import.meta.env && import.meta.env.VITE_DEMO_WHATSAPP) || '';
   const bookingUrl = (import.meta.env && import.meta.env.VITE_BOOKING_URL) || '';
   const calLink = client.calLink || (import.meta.env && import.meta.env.VITE_CAL_LINK) || '';
@@ -149,7 +149,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-lg bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl p-6 sm:p-8 overflow-hidden">
+      <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl p-6 sm:p-8">
         
         {/* Close Button */}
         <button
@@ -184,7 +184,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
             {demoEndpointActive && (
               <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/60 text-xs leading-relaxed">
                 <p className="font-semibold text-amber-300">Demo delivery active - enter fake/sample details only.</p>
-                <p className="mt-1 text-amber-200/90">This form sends what you enter to <span className="font-mono text-amber-100">{demoEndpointHost}</span>, a demo destination from the shared link - not to a studio inbox. Do not enter real contact details.</p>
+                <p className="mt-1 text-amber-200/90">This form sends what you enter to <span className="font-mono text-amber-100">{demoEndpointHost}</span>, a demo destination from the shared link - not to a studio inbox. Do not enter real contact details.{web3formsKey && ' The configured studio email delivery also receives this test.'}</p>
               </div>
             )}
 
