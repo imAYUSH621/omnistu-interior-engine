@@ -20,6 +20,7 @@ const FLOWS = [
   {
     icon: Inbox,
     title: 'Enquiries that reach you',
+    keyBenefit: 'Send a test enquiry and open the studio owner view: name, phone, timeline and project context together. On this master demo the enquiry really is emailed to the Omnistu team inbox, labeled as a test - the same delivery your studio gets to your own business email when we set you up.',
     benefit: 'Send a test enquiry and open the studio owner view: name, phone, timeline and project context together. In a live setup the same enquiry is delivered to your business email and CRM automatically.'
   },
   {
@@ -57,20 +58,22 @@ export function DemoPrologue({ isOpen, onClose, onStartTour, client }) {
         </p>
 
         <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {FLOWS.map(({ icon: Icon, title, benefit }) => (
+          {FLOWS.map(({ icon: Icon, title, benefit, keyBenefit }) => (
             <div key={title} className="p-4 rounded-xl bg-zinc-900/70 border border-zinc-800">
               <div className="flex items-center space-x-2">
                 <Icon className="w-4 h-4 text-brand-400" />
                 <h3 className="text-sm font-semibold text-white">{title}</h3>
               </div>
-              <p className="mt-2 text-xs text-zinc-400 leading-relaxed">{benefit}</p>
+              <p className="mt-2 text-xs text-zinc-400 leading-relaxed">{client.web3formsKey && keyBenefit ? keyBenefit : benefit}</p>
             </div>
           ))}
         </div>
 
         <p className="mt-5 text-[11px] font-mono text-zinc-500 leading-relaxed border-t border-zinc-800/80 pt-4">
           Honest boundaries: this is a sample studio with sample data - not a real business.
-          Test enquiries are clearly labeled, and nothing here claims to be connected to a real inbox or CRM.
+          {client.web3formsKey
+            ? 'Test enquiries are clearly labeled and really arrive in Omnistu\u2019s own team inbox on this master demo; no CRM is connected here.'
+            : 'Test enquiries are clearly labeled, and nothing here claims to be connected to a real inbox or CRM.'}
           In a live setup each piece is connected to your own accounts and verified with you.
         </p>
 
