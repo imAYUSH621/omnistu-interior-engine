@@ -247,11 +247,11 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
 
             <div>
               <h3 className="text-2xl font-bold font-display text-white">
-                {delivery === 'sent' ? 'Request Received!' : delivery === 'failed' ? 'Sending Failed' : 'Demo Mode - Not Sent'}
+                {delivery === 'sent' ? 'Request Accepted by Delivery Service' : delivery === 'failed' ? 'Sending Failed' : 'Demo Mode - Not Sent'}
               </h3>
               <p className="text-xs text-zinc-300 mt-2 max-w-sm mx-auto leading-relaxed">
                 {delivery === 'sent' ? (
-                  <>Thank you, <span className="font-semibold text-white">{formData.name}</span>. The <span className="text-brand-300">{client.name}</span> team has received your request and will follow up shortly.</>
+                  <>Thank you, <span className="font-semibold text-white">{formData.name}</span>. The delivery service has accepted your request for <span className="text-brand-300">{client.name}</span>. Acceptance by the service is not confirmation that the studio team has seen it yet - they follow up from their inbox.</>
                 ) : delivery === 'failed' ? (
                   <>Sorry, <span className="font-semibold text-white">{formData.name}</span> - your request could not be delivered just now. Please use the direct contact options below.</>
                 ) : (
@@ -263,7 +263,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
                   {crmSync === 'synced'
                     ? 'CRM handoff: accepted by the configured CRM endpoint.'
                     : crmSync === 'failed'
-                      ? 'CRM handoff failed - your request was still received by the studio inbox above.'
+                      ? 'CRM handoff failed - your request was still accepted by the delivery service above.'
                       : 'CRM handoff: not configured for this studio yet.'}
                 </p>
               )}
@@ -338,8 +338,8 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
         {client.analyticsEndpoint && analyticsConsent === null && (
           <div className="mt-5 p-3 rounded-xl bg-zinc-900 border border-zinc-800 text-left">
             <p className="text-[11px] text-zinc-400 leading-relaxed">
-              Allow anonymous usage events on this site? Only the type of action
-              is counted - never your name, phone, email or enquiry details.
+              Allow usage events on this site? Only the type of action is
+              counted - never your name, phone, email or enquiry details.
             </p>
             <div className="mt-2 flex items-center space-x-3">
               <button
@@ -358,9 +358,15 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
           </div>
         )}
         {client.analyticsEndpoint && analyticsConsent === true && (
-          <p className="mt-4 text-[10px] font-mono text-zinc-600">
-            Anonymous usage events are on (no personal details). You can withdraw anytime by clearing site data.
-          </p>
+          <div className="mt-4 flex items-center justify-center space-x-2 text-[10px] font-mono text-zinc-600">
+            <span>Usage events are on - no contact details are sent.</span>
+            <button
+              onClick={() => chooseAnalyticsConsent(false)}
+              className="px-2 py-1 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition"
+            >
+              Withdraw
+            </button>
+          </div>
         )}
 
       </div>
