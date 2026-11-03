@@ -231,7 +231,9 @@ export const DEFAULT_CLIENT = {
   // design (client-side form key). Named sample studio presets keep
   // web3formsKey: '' - a real studio's key is set up per client.
   web3formsKey: '3928251b-2cd5-4485-8a9b-00abf5790826',
-  calLink: '',
+  // Master demo booking: Omnistu's real Cal.com event (free plan,
+  // Asia/Kolkata default availability). Sample studios keep calLink: ''.
+  calLink: 'omnistu/consultation',
   crmWebhookUrl: '',
   analyticsEndpoint: '',
   email: '',

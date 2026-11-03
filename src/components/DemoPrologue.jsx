@@ -26,6 +26,7 @@ const FLOWS = [
   {
     icon: CalendarCheck,
     title: 'Direct consultation booking',
+    keyBenefit: 'The booking step is live on this master demo: it opens Omnistu\u2019s real Cal.com calendar, so you can book an actual slot. For your studio it opens your own calendar when we set you up.',
     benefit: 'The booking step is built into the same flow. In this demo it is shown but not connected; in a live setup it opens your real calendar, so a prospect books while intent is hot.'
   }
 ];
@@ -64,7 +65,11 @@ export function DemoPrologue({ isOpen, onClose, onStartTour, client }) {
                 <Icon className="w-4 h-4 text-brand-400" />
                 <h3 className="text-sm font-semibold text-white">{title}</h3>
               </div>
-              <p className="mt-2 text-xs text-zinc-400 leading-relaxed">{client.web3formsKey && keyBenefit ? keyBenefit : benefit}</p>
+              <p className="mt-2 text-xs text-zinc-400 leading-relaxed">
+                {title === 'Direct consultation booking'
+                  ? (client.calLink && keyBenefit ? keyBenefit : benefit)
+                  : (client.web3formsKey && keyBenefit ? keyBenefit : benefit)}
+              </p>
             </div>
           ))}
         </div>
