@@ -14,7 +14,7 @@ export const PRESET_CLIENTS = {
     email: '',
     tagline: 'Premier Full-Home Renovation & Architectural Climate Comfort',
     heroHeadline: 'Experience Your Home Reimagined in Photorealistic 3D',
-    heroSubheadline: 'From complete architectural redesigns to bespoke living spaces in South Florida. Visualize your transformation in 15 seconds.',
+    heroSubheadline: 'From complete architectural redesigns to bespoke living spaces in South Florida. Explore AI design concepts and an illustrative estimate before you commit.',
     accentColor: '#a38461',
     badge: 'Sample demo profile - not a real business',
     isSample: true,
@@ -55,8 +55,8 @@ export const PRESET_CLIENTS = {
     analyticsEndpoint: '', // Consent-gated event collector; empty = no analytics, nothing tracked
     email: '',
     tagline: 'Turnkey Architectural Design, Custom Millwork & Whole-Home Remodeling',
-    heroHeadline: 'Instant 3D Architectural Remodel Before You Break Ground',
-    heroSubheadline: 'Don’t guess what your home will look like. Upload your space, customize finish grades, and get an exact itemized investment breakdown.',
+    heroHeadline: 'See Design Concepts for Your Remodel Before You Break Ground',
+    heroSubheadline: 'Don’t guess what your home will look like. Explore AI design concepts, compare finish grades, and see an illustrative investment breakdown.',
     accentColor: '#b38053',
     badge: 'Sample demo profile - not a real business',
     isSample: true,
@@ -77,13 +77,61 @@ export const PRESET_CLIENTS = {
     email: '',
     tagline: 'Quiet Luxury, Natural Stone & Calibrated Architectural Lighting',
     heroHeadline: 'Turn Your Space into a Serene Architectural Oasis',
-    heroSubheadline: 'Zero guesswork. Experience custom 3D staging of your living room, chef’s kitchen, or master suite in under 15 seconds.',
+    heroSubheadline: 'Zero guesswork. Explore AI design concepts for your living room, chef’s kitchen, or master suite - with an illustrative budget for each direction.',
     accentColor: '#d4af37',
     badge: 'Sample demo profile - not a real business',
     isSample: true,
     projectsCompleted: '280+',
     avgRating: '5.0',
     featuredStyle: 'Japandi Serenity & Calacatta Stone'
+  },
+  'modnest-living': {
+    id: 'modnest-living',
+    name: 'ModNest Smart Living',
+    city: 'Pune & Bengaluru',
+    phone: '',
+    whatsapp: '',
+    web3formsKey: '',
+    calLink: '',
+    crmWebhookUrl: '',
+    analyticsEndpoint: '',
+    email: '',
+    tagline: 'Budget-Friendly Modular Kitchens, Wardrobes & First-Home Interiors',
+    heroHeadline: 'Stylish Interiors on a Real Budget',
+    heroSubheadline: 'Modular packages, transparent per-sq-ft pricing and AI design concepts for first homes and rentals - see options before you spend.',
+    accentColor: '#5f8f7a',
+    badge: 'Sample demo profile - not a real business',
+    isSample: true,
+    projectsCompleted: '600+',
+    avgRating: '4.8',
+    featuredStyle: 'Compact Modern & Budget Japandi',
+    estimator: {
+      currency: '\u20b9',
+      locale: 'en-IN',
+      tiers: [
+        {
+          id: 'smart',
+          name: 'Smart Basics',
+          pricePerSqft: 1100,
+          tagline: 'Functional modular essentials for first homes and rentals',
+          materials: ['Standard Laminates & Fittings', 'Modular Kitchen & Wardrobe', 'Essential Lighting']
+        },
+        {
+          id: 'comfort',
+          name: 'Comfort Plus',
+          pricePerSqft: 1900,
+          tagline: 'Upgraded finishes, better hardware, smarter storage',
+          materials: ['Acrylic & Membrane Finishes', 'Soft-Close Branded Hardware', 'False Ceiling with Cove Lighting']
+        },
+        {
+          id: 'premium',
+          name: 'Premium Compact',
+          pricePerSqft: 3000,
+          tagline: 'Designer finishes and layered lighting for compact homes',
+          materials: ['Veneer & PU Finishes', 'Quartz Counters', 'Designer Lighting']
+        }
+      ]
+    }
   },
   'arcline-interiors': {
     id: 'arcline-interiors',
@@ -221,8 +269,8 @@ export function getClientProfile(slugOrQuery, searchParams = null) {
         whatsapp: (customPhone || '').replace(/[^0-9]/g, '') || '',
         isSample: true,
         tagline: customTagline || 'Bespoke Architectural Interiors & Luxury Remodeling',
-        heroHeadline: `Experience Your ${customName} Space in 3D`,
-        heroSubheadline: `Premier architectural staging and luxury renovations serving ${customCity || 'our community'}.`
+        heroHeadline: `Design Concepts & Estimates by ${customName}`,
+        heroSubheadline: `Explore AI design concepts, portfolio highlights and an illustrative project estimate - serving ${customCity || 'our community'}.`
       };
     }
   }
@@ -247,7 +295,7 @@ export function getClientProfile(slugOrQuery, searchParams = null) {
     id: cleanKey,
     name: generatedName,
     city: 'Your Local Area',
-    heroHeadline: `Experience Your ${generatedName} Space in 3D`,
-    heroSubheadline: `Premier architectural staging, custom millwork, and luxury renovation serving your area.`
+    heroHeadline: `Design Concepts & Estimates by ${generatedName}`,
+    heroSubheadline: `Explore AI design concepts, portfolio highlights and an illustrative project estimate - serving your area.`
   };
 }
