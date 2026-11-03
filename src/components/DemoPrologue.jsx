@@ -10,7 +10,7 @@ const FLOWS = [
   {
     icon: Sparkles,
     title: 'AI design concepts',
-    benefit: 'A visitor picks a style and gets a real AI-generated concept in under a minute - try it on this page. This is the hook that turns a casual browser into an engaged prospect.'
+    benefit: 'A visitor picks a style and gets a real AI-generated concept - try it on this page. Free generation time varies and the page says so honestly when the provider is busy. This is the hook that turns a casual browser into an engaged prospect.'
   },
   {
     icon: Calculator,

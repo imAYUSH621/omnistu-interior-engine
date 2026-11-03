@@ -146,7 +146,7 @@ export function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0c0c0e] text-[#f4f2ee] font-sans antialiased flex flex-col selection:bg-brand-500 selection:text-white">
+    <div className="min-h-screen overflow-x-hidden bg-[#0c0c0e] text-[#f4f2ee] font-sans antialiased flex flex-col selection:bg-brand-500 selection:text-white">
       
       {/* Dynamic Client Navigation */}
       <Navbar
