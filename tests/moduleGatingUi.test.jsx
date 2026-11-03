@@ -4,7 +4,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { LeadModal } from '../src/components/LeadModal';
 import { DEFAULT_CLIENT } from '../src/data/clients';
 
-const base = { ...DEFAULT_CLIENT, isSample: false, whatsapp: '919999999999', calLink: 'demo/consult' };
+const base = { ...DEFAULT_CLIENT, web3formsKey: '', isSample: false, whatsapp: '919999999999', calLink: 'demo/consult' };
 
 function submitDemo() {
   fireEvent.change(screen.getByPlaceholderText(/Katherine Vance/i), { target: { value: 'Jane Doe' } });

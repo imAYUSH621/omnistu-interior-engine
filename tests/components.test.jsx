@@ -179,7 +179,7 @@ describe('React Component Suite & Full Application Flow', () => {
       <LeadModal
         isOpen={true}
         onClose={handleClose}
-        client={DEFAULT_CLIENT}
+        client={{ ...DEFAULT_CLIENT, web3formsKey: '' }}
         contextData={{ room: 'Living Pavilion', budget: '$45,000' }}
       />
     );

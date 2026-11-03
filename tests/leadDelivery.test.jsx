@@ -4,7 +4,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { LeadModal } from '../src/components/LeadModal';
 import { DEFAULT_CLIENT } from '../src/data/clients';
 
-const liveClient = { ...DEFAULT_CLIENT, isSample: false, whatsapp: '919999999999', phone: '+91 99999 99999' };
+const liveClient = { ...DEFAULT_CLIENT, web3formsKey: '', isSample: false, whatsapp: '919999999999', phone: '+91 99999 99999' };
 
 function fillAndSubmit() {
   fireEvent.change(screen.getByPlaceholderText(/Katherine Vance/i), { target: { value: 'Jane Doe' } });
