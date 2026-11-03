@@ -4,8 +4,56 @@
 
 @layer base {
   body {
-    @apply bg-[#0c0c0e] text-[#f4f2ee];
+    @apply text-[#f4f2ee];
+    background-color: #0c0c0e;
+    background-image:
+      radial-gradient(ellipse 90% 55% at 50% -12%, rgba(163, 132, 97, 0.24), transparent 62%),
+      radial-gradient(ellipse 55% 40% at 88% 8%, rgba(212, 175, 55, 0.05), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 8% 32%, rgba(179, 128, 83, 0.055), transparent 62%);
+    background-attachment: fixed;
   }
+  ::selection {
+    background: rgba(163, 132, 97, 0.4);
+    color: #fff;
+  }
+}
+
+@layer utilities {
+  /* Champagne-to-bronze display gradient for premium headings */
+  .text-gradient-gold {
+    background: linear-gradient(112deg, #faf8f4 25%, #e3dcce 48%, #b8a184 78%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  /* Gradient hairline used as a section divider accent */
+  .section-hairline {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(163, 132, 97, 0.38), transparent);
+  }
+  /* Gradient ring for premium surfaces (modals, key cards) */
+  .gradient-ring {
+    border: 1px solid transparent;
+    background:
+      linear-gradient(#101013, #101013) padding-box,
+      linear-gradient(140deg, rgba(207, 193, 172, 0.4), rgba(163, 132, 97, 0.12) 45%, rgba(212, 175, 55, 0.22)) border-box;
+  }
+}
+
+/* Slow ambient drift for hero glows */
+@keyframes glowDrift {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50% { transform: translate(-48%, -54%) scale(1.12); opacity: 0.85; }
+}
+.glow-drift {
+  animation: glowDrift 9s ease-in-out infinite;
+}
+@keyframes glowDriftAlt {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.15) translateY(-6%); opacity: 1; }
+}
+.glow-drift-alt {
+  animation: glowDriftAlt 11s ease-in-out infinite;
 }
 
 /* Custom Scrollbar */

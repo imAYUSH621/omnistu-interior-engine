@@ -19,7 +19,7 @@ export function PortfolioShowcase({ client, onOpenLeadModal }) {
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-500/15 border border-brand-500/30 text-brand-300 text-xs font-mono uppercase tracking-wider mb-4">
             <span>Sample Design Concepts</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold font-display text-white tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-extrabold font-display text-gradient-gold tracking-tight">
             Sample Concepts & Style Gallery
           </h2>
           <p className="mt-4 text-base sm:text-lg text-zinc-400 font-light">

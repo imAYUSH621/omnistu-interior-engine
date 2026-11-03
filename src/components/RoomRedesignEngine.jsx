@@ -119,7 +119,7 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
             <Sparkles className="w-3.5 h-3.5" />
             <span>Interactive AI Staging Studio</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold font-display text-white tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-extrabold font-display text-gradient-gold tracking-tight">
             {aiStatus === 'unavailable' ? 'Explore Design Concepts in Your Chosen Style' : 'Get a Free AI Design Concept in Your Chosen Style'}
           </h2>
           <p className="mt-4 text-base sm:text-lg text-zinc-400 font-light">
