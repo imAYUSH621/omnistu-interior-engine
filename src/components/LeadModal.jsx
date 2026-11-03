@@ -14,6 +14,9 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
     notes: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  // Explicit visitor consent before anything is sent to a link-supplied demo
+  // endpoint. Required only in that mode; trusted config paths don't ask.
+  const [demoConsent, setDemoConsent] = useState(false);
   const [delivery, setDelivery] = useState(null); // 'sent' | 'failed' | 'demo'
   // CRM handoff is a separate state from delivery: provider acceptance is not
   // inbox receipt, and neither is CRM sync.
@@ -33,14 +36,23 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
   // the operator's own demo). Empty = that path stays inactive and the UI says
   // so honestly. No account or destination is assumed.
   const web3formsKey = client.web3formsKey || (import.meta.env && import.meta.env.VITE_WEB3FORMS_KEY) || '';
-  // Runtime demo config: the link owner can attach a real lead endpoint and
-  // CRM webhook via URL params (?leadEndpoint=...&crmWebhook=...) so a live
-  // demo needs no rebuild. No secrets are involved - a public webhook URL is
-  // visible in the link itself, and the destination host is shown to the
-  // visitor below. Link params take precedence over build-time config.
+  // Runtime demo config: the presenter can attach a lead endpoint and CRM
+  // webhook via URL params so a live demo needs no rebuild - but ONLY in
+  // explicit demo mode (?demoMode=endpoints). A shared link alone must never
+  // silently redirect a visitor's contact details to an arbitrary endpoint.
+  // Production delivery stays with trusted config (per-client profile or
+  // build-time env), never the URL. No secrets belong in these URLs: they are
+  // visible in the link itself.
   const linkParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
-  const leadEndpoint = linkParams.get('leadEndpoint') || (import.meta.env && import.meta.env.VITE_LEAD_ENDPOINT) || '';
-  const crmWebhookOverride = linkParams.get('crmWebhook') || '';
+  const leadEndpointParam = linkParams.get('leadEndpoint') || '';
+  const crmWebhookParam = linkParams.get('crmWebhook') || '';
+  const demoMode = linkParams.get('demoMode') === 'endpoints';
+  const leadEndpoint = (demoMode ? leadEndpointParam : '') || (import.meta.env && import.meta.env.VITE_LEAD_ENDPOINT) || '';
+  const crmWebhookOverride = demoMode ? crmWebhookParam : '';
+  const demoEndpointActive = demoMode && !!leadEndpointParam;
+  const demoEndpointHost = (() => {
+    try { return new URL(leadEndpointParam || crmWebhookParam).host; } catch { return 'the link-supplied endpoint'; }
+  })();
   const whatsappNumber = client.whatsapp || (import.meta.env && import.meta.env.VITE_DEMO_WHATSAPP) || '';
   const bookingUrl = (import.meta.env && import.meta.env.VITE_BOOKING_URL) || '';
   const calLink = client.calLink || (import.meta.env && import.meta.env.VITE_CAL_LINK) || '';
@@ -48,6 +60,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
+    if (demoEndpointActive && !demoConsent) return;
 
     // Save locally for persistence
     const newLead = {
@@ -168,6 +181,13 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
               </div>
             )}
 
+            {demoEndpointActive && (
+              <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/60 text-xs leading-relaxed">
+                <p className="font-semibold text-amber-300">Demo delivery active - enter fake/sample details only.</p>
+                <p className="mt-1 text-amber-200/90">This form sends what you enter to <span className="font-mono text-amber-100">{demoEndpointHost}</span>, a demo destination from the shared link - not to a studio inbox. Do not enter real contact details.</p>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
               <div>
                 <label className="block text-xs font-mono text-zinc-400 mb-1">Full Name</label>
@@ -233,22 +253,37 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
                 </div>
               </div>
 
+              {demoEndpointActive && (
+                <label className="flex items-start space-x-2 text-xs text-zinc-300 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={demoConsent}
+                    onChange={(e) => setDemoConsent(e.target.checked)}
+                    className="mt-0.5 accent-amber-400"
+                  />
+                  <span>I understand this is a demo: the details I entered are fake/sample and will be sent to <span className="font-mono text-amber-200">{demoEndpointHost}</span>.</span>
+                </label>
+              )}
+
               <button
                 type="submit"
-                className="w-full py-3.5 mt-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-xs tracking-wider uppercase transition shadow-xl shadow-brand-500/25 active:scale-95"
+                disabled={demoEndpointActive && !demoConsent}
+                className="w-full py-3.5 mt-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-xs tracking-wider uppercase transition shadow-xl shadow-brand-500/25 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
               >
                 Request My Free Consultation
               </button>
             </form>
 
-            <div className="mt-4 flex items-center justify-center space-x-2 text-[11px] font-mono text-zinc-500">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Zero-Spam Privacy Invariant • Direct to Lead Designer</span>
-            </div>
-            {linkParams.get('leadEndpoint') && (
-              <p className="mt-2 text-center text-[10px] font-mono text-zinc-600">
-                Link-configured demo: enquiries go to {(() => { try { return new URL(linkParams.get('leadEndpoint')).host; } catch { return 'the configured endpoint'; } })()}
-              </p>
+            {demoEndpointActive ? (
+              <div className="mt-4 flex items-center justify-center space-x-2 text-[11px] font-mono text-zinc-400">
+                <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                <span>Demo delivery to {demoEndpointHost} • not the studio's private inbox</span>
+              </div>
+            ) : (
+              <div className="mt-4 flex items-center justify-center space-x-2 text-[11px] font-mono text-zinc-500">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Zero-Spam Privacy Invariant • Direct to Lead Designer</span>
+              </div>
             )}
           </div>
         ) : (
@@ -263,7 +298,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
               </h3>
               <p className="text-xs text-zinc-300 mt-2 max-w-sm mx-auto leading-relaxed">
                 {delivery === 'sent' ? (
-                  <>Thank you, <span className="font-semibold text-white">{formData.name}</span>. The delivery service has accepted your request for <span className="text-brand-300">{client.name}</span>. Acceptance by the service is not confirmation that the studio team has seen it yet - they follow up from their inbox.</>
+                  <>Thank you, <span className="font-semibold text-white">{formData.name}</span>. The delivery service has accepted your request for <span className="text-brand-300">{client.name}</span>. Acceptance by the service is not confirmation that the studio team has seen it yet - they follow up from their inbox.{demoEndpointActive && <> Delivered to demo destination <span className="font-mono text-amber-200">{demoEndpointHost}</span> (a test sink from the shared link, not the studio's CRM).</>} </>
                 ) : delivery === 'failed' ? (
                   <>Sorry, <span className="font-semibold text-white">{formData.name}</span> - your request could not be delivered just now. Please use the direct contact options below.</>
                 ) : (

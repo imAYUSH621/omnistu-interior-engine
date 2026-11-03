@@ -7,7 +7,7 @@ import { PortfolioShowcase } from './components/PortfolioShowcase';
 import { LeadModal } from './components/LeadModal';
 import { OnboardingModal } from './components/OnboardingModal';
 import { Footer } from './components/Footer';
-import { getClientProfile, DEFAULT_CLIENT, getModules } from './data/clients';
+import { getClientProfile, DEFAULT_CLIENT, getModules, isPlatformDemoHost } from './data/clients';
 
 export function App() {
   const [currentClient, setCurrentClient] = useState(DEFAULT_CLIENT);
@@ -28,7 +28,7 @@ export function App() {
       const isLocalhost = hostname === 'localhost';
       
       let subClient = null;
-      if (!isIpv4 && !isLocalhost) {
+      if (!isIpv4 && !isLocalhost && !isPlatformDemoHost(hostname)) {
         const parts = hostname.split('.');
         if (parts.length > 2 && parts[0] !== 'www' && parts[0] !== 'id') {
           subClient = parts[0];
