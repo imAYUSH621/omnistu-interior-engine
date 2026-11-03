@@ -71,7 +71,7 @@ describe('Client-dependent module gating in the enquiry flow', () => {
     render(<LeadModal isOpen={true} onClose={() => {}} client={client} contextData={{}} />);
     submitDemo();
     expect(await screen.findByText(/Request Accepted by Delivery Service/i)).toBeDefined();
-    expect(await screen.findByText(/CRM handoff failed/i)).toBeDefined();
+    expect(await screen.findByText(/handoff outcome unknown/i)).toBeDefined();
   });
 });
 

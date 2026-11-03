@@ -17,15 +17,19 @@
  * imply inbox receipt, and neither implies CRM sync. States:
  *   'skipped' - no endpoint configured (default; nothing posted)
  *   'synced'  - endpoint accepted the handoff (HTTP 2xx)
- *   'failed'  - endpoint unreachable or rejected
+ *   'failed'  - explicit rejection (still reconcile before retry)
+ *   'unknown' - timeout/network/5xx: upstream may have accepted before reply was lost
  */
-export async function handoffLeadToCrm({ endpoint, lead, fetchImpl }) {
+export async function handoffLeadToCrm({ endpoint, lead, fetchImpl, timeoutMs = 8000 }) {
   if (!endpoint) return 'skipped';
   const doFetch = fetchImpl || (typeof fetch !== 'undefined' ? fetch : null);
   if (!doFetch) return 'failed';
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const res = await doFetch(endpoint, {
       method: 'POST',
+      signal: controller.signal,
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({
         source: 'omnistu-engine',
@@ -34,10 +38,24 @@ export async function handoffLeadToCrm({ endpoint, lead, fetchImpl }) {
         lead,
       }),
     });
-    if (!res?.ok) return 'failed';
+    if (!res?.ok) return res?.status >= 500 ? 'unknown' : 'failed';
     const result = typeof res.json === 'function' ? await res.json().catch(() => null) : null;
     return result && (result.ok === false || result.success === false) ? 'failed' : 'synced';
   } catch {
-    return 'failed';
+    return 'unknown';
+  } finally {
+    clearTimeout(timer);
   }
+}
+
+// No automatic replay: acceptance may have happened before a lost reply.
+// Pure advice only: no data persistence, no retry queue, no new network call.
+export function handoffRecovery(state) {
+  return {
+    autoRetry: false,
+    next: state === 'unknown' ? 'check_destination_before_retry'
+      : state === 'failed' ? 'inspect_rejection_and_destination_before_retry'
+      : state === 'synced' ? 'verify_actual_record' : 'configure_if_requested',
+    deliveryMustBeRepeated: false,
+  };
 }
