@@ -16,7 +16,7 @@ export function Navbar({ client, onSelectClient, onOpenOnboard, onBookConsult, o
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="font-display font-bold text-lg sm:text-xl tracking-tight text-white">
+              <span className="font-display font-bold text-base sm:text-xl tracking-tight text-white truncate max-w-[110px] sm:max-w-none">
                 {client.name}
               </span>
               <span className="hidden md:inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-brand-500/15 text-brand-300 border border-brand-500/30">
@@ -52,7 +52,7 @@ export function Navbar({ client, onSelectClient, onOpenOnboard, onBookConsult, o
             >
               <Building2 className="w-3.5 h-3.5 text-brand-400" />
               <span className="hidden sm:inline">Switch Client:</span>
-              <span className="font-semibold text-white max-w-[100px] truncate">{client.id}</span>
+              <span className="hidden sm:inline font-semibold text-white max-w-[100px] truncate">{client.id}</span>
               <ChevronDown className="w-3.5 h-3.5 text-zinc-400" />
             </button>
 
@@ -111,7 +111,8 @@ export function Navbar({ client, onSelectClient, onOpenOnboard, onBookConsult, o
             className="px-4 py-2 rounded-lg bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-medium text-xs sm:text-sm tracking-wide shadow-lg shadow-brand-500/25 transition active:scale-95 flex items-center space-x-2"
           >
             <Calendar className="w-4 h-4" />
-            <span>Request Consultation</span>
+            <span className="hidden sm:inline">Request Consultation</span>
+            <span className="sm:hidden">Consult</span>
           </button>
         </div>
 

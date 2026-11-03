@@ -43,8 +43,8 @@ export function DemoGuide({ visible, onClose, onAction }) {
   };
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-2rem)] max-w-2xl animate-in slide-in-from-bottom-4 fade-in">
-      <div className="rounded-2xl bg-zinc-950/95 backdrop-blur border border-brand-500/40 shadow-2xl shadow-black/60 p-3 sm:p-4">
+    <div className="fixed bottom-0 inset-x-0 z-40 flex justify-center px-3 pb-3 pointer-events-none">
+      <div className="pointer-events-auto w-full max-w-2xl rounded-2xl bg-zinc-950/95 backdrop-blur border border-brand-500/40 shadow-2xl shadow-black/60 p-3 sm:p-4">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[10px] font-mono uppercase tracking-widest text-brand-300">
             Demo guide • step {current + 1} of {STEPS.length}
