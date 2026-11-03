@@ -71,8 +71,12 @@ export function Footer({ client }) {
           <div className="flex items-center space-x-2">
             <span>Powered by</span>
             <span className="text-brand-300 font-semibold">Omnistu Interior Engine</span>
-            <span>• Built for Vercel</span>
           </div>
+          {client.isSample && (
+            <a href="?view=offers" className="hover:text-brand-300 transition underline underline-offset-2 decoration-zinc-700">
+              Run an interior business? See what Omnistu builds
+            </a>
+          )}
         </div>
 
       </div>

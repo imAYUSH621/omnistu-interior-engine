@@ -7,6 +7,7 @@ import { PortfolioShowcase } from './components/PortfolioShowcase';
 import { LeadModal } from './components/LeadModal';
 import { OnboardingModal } from './components/OnboardingModal';
 import { Footer } from './components/Footer';
+import { StudioOffers } from './components/StudioOffers';
 import { getClientProfile, DEFAULT_CLIENT, getModules, isPlatformDemoHost } from './data/clients';
 import { DemoPrologue } from './components/DemoPrologue';
 import { DemoGuide } from './components/DemoGuide';
@@ -75,13 +76,15 @@ export function App() {
 
   // Embeddable widget mode: ?view=embed renders only the AI concept engine
   // and lead modal, for iframing into a client's existing website.
-  const isEmbed = useMemo(() => {
+  const viewParam = useMemo(() => {
     try {
-      return new URLSearchParams(window.location.search).get('view') === 'embed';
+      return new URLSearchParams(window.location.search).get('view');
     } catch {
-      return false;
+      return null;
     }
   }, []);
+  const isEmbed = viewParam === 'embed';
+  const isOffers = viewParam === 'offers';
 
   // Auto-open the prologue once per session for sample (demo) profiles.
   useEffect(() => {
@@ -127,6 +130,10 @@ export function App() {
     post();
     return () => observer.disconnect();
   }, [isEmbed]);
+
+  if (isOffers) {
+    return <StudioOffers />;
+  }
 
   if (isEmbed) {
     return (
