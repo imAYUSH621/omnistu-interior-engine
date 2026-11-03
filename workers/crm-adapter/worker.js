@@ -1,65 +1,83 @@
-// Omnistu CRM handoff worker - SKELETON, not deployed.
-// Request-driven lead forwarding: validate, rate-limit, forward, forget.
-// Secrets (CRM_API_KEY) live as Worker secrets, never in this file.
+// Generic adapter, NOT a verified connection to any particular CRM.
+// Secrets and destination live in deployment config, never in the browser.
+const MAX_BYTES = 16_384;
+const isText = (v, max, min = 0) => typeof v === 'string' && v.trim().length >= min && v.length <= max;
 
-const RATE_LIMIT_PER_MINUTE = 5;
-const hits = new Map(); // per-isolate best effort; upgrade to KV if needed
-
-function rateLimited(ip) {
-  const now = Date.now();
-  const windowStart = now - 60_000;
-  const list = (hits.get(ip) || []).filter((t) => t > windowStart);
-  list.push(now);
-  hits.set(ip, list);
-  return list.length > RATE_LIMIT_PER_MINUTE;
+export function normalizeLead(body) {
+  if (!body || body.source !== 'omnistu-engine' || body.type !== 'consultation_enquiry') return null;
+  const lead = body.lead;
+  if (!lead || !isText(lead.name, 120, 2) || !isText(lead.phone, 120, 5) ||
+      !isText(lead.email, 254, 3) || !isText(lead.client, 160, 1) ||
+      (lead.website && lead.website !== '') ||
+      (lead.notes != null && !isText(lead.notes, 4000)) ||
+      (lead.timeline != null && !isText(lead.timeline, 160))) return null;
+  const context = {};
+  for (const key of ['room', 'style', 'budget', 'intent']) {
+    if (lead.context?.[key] != null) {
+      if (!isText(lead.context[key], 500)) return null;
+      context[key] = lead.context[key];
+    }
+  }
+  return { name: lead.name.trim(), phone: lead.phone.trim(), email: lead.email.trim(),
+    client: lead.client, timeline: lead.timeline || '', notes: lead.notes || '', context };
 }
 
-function validLead(body) {
-  return (
-    body &&
-    typeof body.name === 'string' && body.name.length >= 2 && body.name.length <= 120 &&
-    typeof body.contact === 'string' && body.contact.length >= 5 && body.contact.length <= 120 &&
-    typeof body.clientId === 'string' && body.clientId.length <= 80 &&
-    (!body.website || body.website === '') // honeypot: bots fill hidden fields
-  );
-}
-
-export default {
-  async fetch(request, env) {
-    if (request.method !== 'POST') {
-      return new Response('method not allowed', { status: 405 });
-    }
-    const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
-    if (rateLimited(ip)) {
-      return Response.json({ ok: false, error: 'rate_limited' }, { status: 429 });
-    }
-    let body;
+export function createAdapter({ fetchImpl = fetch } = {}) {
+  return { async fetch(request, env) {
+    const origin = request.headers.get('Origin');
+    const allowed = (env.ALLOWED_ORIGINS || '').split(',').map(x => x.trim()).filter(Boolean);
+    const cors = origin && allowed.includes(origin) ? {
+      'Access-Control-Allow-Origin': origin,
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Accept',
+      Vary: 'Origin',
+    } : {};
+    const reply = (status, error) => Response.json(error ? { ok: false, error } : { ok: true },
+      { status, headers: { ...cors, 'Cache-Control': 'no-store' } });
+    if (!origin || !allowed.includes(origin)) return reply(403, 'origin_not_allowed');
+    if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
+    if (request.method !== 'POST') return reply(405, 'method_not_allowed');
+    if (!request.headers.get('Content-Type')?.toLowerCase().startsWith('application/json')) return reply(415, 'json_required');
+    let endpoint;
+    try { endpoint = new URL(env.CRM_ENDPOINT); } catch { return reply(503, 'not_configured'); }
+    // A destination/auth/schema must be verified before deployment. No arbitrary
+    // browser-supplied destination, redirects or credentials in URLs.
+    if (endpoint.protocol !== 'https:' || endpoint.username || endpoint.password || !env.CRM_API_KEY || !env.LEAD_RATE_LIMITER)
+      return reply(503, 'not_configured');
     try {
-      body = await request.json();
-    } catch {
-      return Response.json({ ok: false, error: 'invalid_json' }, { status: 400 });
+      const limit = await env.LEAD_RATE_LIMITER.limit({ key: request.headers.get('CF-Connecting-IP') || 'unknown' });
+      if (!limit.success) return reply(429, 'rate_limited');
+    } catch { return reply(503, 'rate_limit_unavailable'); }
+    if (Number(request.headers.get('Content-Length')) > MAX_BYTES) return reply(413, 'payload_too_large');
+    // Bound streamed bodies too, not just the untrusted Content-Length header.
+    const reader = request.body?.getReader();
+    if (!reader) return reply(400, 'invalid_json');
+    let text = '', size = 0;
+    const decoder = new TextDecoder();
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > MAX_BYTES) { await reader.cancel(); return reply(413, 'payload_too_large'); }
+      text += decoder.decode(value, { stream: true });
     }
-    if (!validLead(body)) {
-      return Response.json({ ok: false, error: 'invalid_lead' }, { status: 422 });
-    }
-    // Forward to the CRM with the secret-held key. Endpoint and schema are
-    // placeholders until the actual CRM is identified and tested.
-    const upstream = await fetch(env.CRM_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${env.CRM_API_KEY}`,
-      },
-      body: JSON.stringify({
-        name: body.name,
-        contact: body.contact,
-        message: body.message || '',
-        source: `omnistu:${body.clientId}`,
-      }),
-    });
-    if (!upstream.ok) {
-      return Response.json({ ok: false, error: 'crm_rejected' }, { status: 502 });
-    }
-    return Response.json({ ok: true });
-  },
-};
+    text += decoder.decode();
+    let body;
+    try { body = JSON.parse(text); } catch { return reply(400, 'invalid_json'); }
+    const lead = normalizeLead(body);
+    if (!lead) return reply(422, 'invalid_lead');
+    try {
+      const upstream = await fetchImpl(endpoint.href, {
+        method: 'POST', redirect: 'error', signal: AbortSignal.timeout(8000),
+        headers: { 'Content-Type': 'application/json', authorization: `Bearer ${env.CRM_API_KEY}` },
+        // Generic handoff envelope. Map only after the chosen CRM is verified.
+        body: JSON.stringify({ source: body.source, type: body.type, lead }),
+      });
+      if (!upstream.ok) return reply(502, 'crm_rejected');
+      const result = await upstream.json().catch(() => null);
+      if (result && (result.ok === false || result.success === false)) return reply(502, 'crm_rejected');
+      return reply(200);
+    } catch { return reply(502, 'crm_unavailable'); }
+  }};
+}
+export default createAdapter();

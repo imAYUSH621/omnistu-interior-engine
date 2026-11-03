@@ -1,6 +1,6 @@
-# crm-adapter worker (skeleton)
+# Generic CRM adapter - not deployed
 
-Design-stage only. See /BACKEND.md for the architecture and activation
-checklist. Deploy only after Cloudflare access, CRM identity and the
-destination email are resolved; secrets are set with
-`wrangler secret put CRM_API_KEY`, never committed.
+See ../../BACKEND.md for contract, limitations and release gates. Configure a
+Cloudflare `LEAD_RATE_LIMITER` binding, `ALLOWED_ORIGINS`, `CRM_ENDPOINT` and
+secret `CRM_API_KEY` only after the selected account/schema are verified.
+Tests use a fake upstream; this is not a Twenty CRM integration claim.
