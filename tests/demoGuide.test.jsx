@@ -6,7 +6,7 @@ import { DemoGuide } from '../src/components/DemoGuide';
 import { OwnerInbox } from '../src/components/OwnerInbox';
 import { DEFAULT_CLIENT } from '../src/data/clients';
 
-const sampleClient = { ...DEFAULT_CLIENT, web3formsKey: '' }; // isSample: true, keyless sample studio
+const sampleClient = { ...DEFAULT_CLIENT, web3formsKey: '', calLink: '' }; // isSample: true, keyless sample studio
 
 describe('Prospect demo prologue', () => {
   it('explains what the demo does and why it benefits the studio, with honest boundaries', () => {
@@ -37,6 +37,7 @@ describe('Prospect demo prologue', () => {
   it('describes real delivery to the Omnistu inbox when the master demo key is present', () => {
     render(<DemoPrologue isOpen={true} onClose={() => {}} onStartTour={() => {}} client={DEFAULT_CLIENT} />);
     expect(screen.getByText(/really is emailed to the Omnistu team inbox/i)).toBeDefined();
+    expect(screen.getByText(/real Cal.com calendar/i)).toBeDefined();
     expect(screen.getByText(/really arrive in Omnistu’s own team inbox/i)).toBeDefined();
     expect(screen.queryByText(/nothing here claims to be connected to a real inbox or CRM/i)).toBeNull();
   });
