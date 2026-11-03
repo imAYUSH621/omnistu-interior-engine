@@ -33,7 +33,14 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
   // the operator's own demo). Empty = that path stays inactive and the UI says
   // so honestly. No account or destination is assumed.
   const web3formsKey = client.web3formsKey || (import.meta.env && import.meta.env.VITE_WEB3FORMS_KEY) || '';
-  const leadEndpoint = (import.meta.env && import.meta.env.VITE_LEAD_ENDPOINT) || '';
+  // Runtime demo config: the link owner can attach a real lead endpoint and
+  // CRM webhook via URL params (?leadEndpoint=...&crmWebhook=...) so a live
+  // demo needs no rebuild. No secrets are involved - a public webhook URL is
+  // visible in the link itself, and the destination host is shown to the
+  // visitor below. Link params take precedence over build-time config.
+  const linkParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  const leadEndpoint = linkParams.get('leadEndpoint') || (import.meta.env && import.meta.env.VITE_LEAD_ENDPOINT) || '';
+  const crmWebhookOverride = linkParams.get('crmWebhook') || '';
   const whatsappNumber = client.whatsapp || (import.meta.env && import.meta.env.VITE_DEMO_WHATSAPP) || '';
   const bookingUrl = (import.meta.env && import.meta.env.VITE_BOOKING_URL) || '';
   const calLink = client.calLink || (import.meta.env && import.meta.env.VITE_CAL_LINK) || '';
@@ -89,7 +96,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
         setDelivery(accepted ? 'sent' : 'failed');
         if (accepted) {
           trackEvent(client, 'enquiry_submitted');
-          setCrmSync(await handoffLeadToCrm({ endpoint: client.crmWebhookUrl, lead: newLead }));
+          setCrmSync(await handoffLeadToCrm({ endpoint: crmWebhookOverride || client.crmWebhookUrl, lead: newLead }));
         }
       } catch {
         setDelivery('failed');
@@ -111,7 +118,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
         setDelivery(accepted ? 'sent' : 'failed');
         if (accepted) {
           trackEvent(client, 'enquiry_submitted');
-          setCrmSync(await handoffLeadToCrm({ endpoint: client.crmWebhookUrl, lead: newLead }));
+          setCrmSync(await handoffLeadToCrm({ endpoint: crmWebhookOverride || client.crmWebhookUrl, lead: newLead }));
         }
       } catch {
         setDelivery('failed');
@@ -238,6 +245,11 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
               <span>Zero-Spam Privacy Invariant • Direct to Lead Designer</span>
             </div>
+            {linkParams.get('leadEndpoint') && (
+              <p className="mt-2 text-center text-[10px] font-mono text-zinc-600">
+                Link-configured demo: enquiries go to {(() => { try { return new URL(linkParams.get('leadEndpoint')).host; } catch { return 'the configured endpoint'; } })()}
+              </p>
+            )}
           </div>
         ) : (
           <div className="text-center py-4 space-y-6">
