@@ -8,12 +8,21 @@ import { LeadModal } from './components/LeadModal';
 import { OnboardingModal } from './components/OnboardingModal';
 import { Footer } from './components/Footer';
 import { getClientProfile, DEFAULT_CLIENT, getModules, isPlatformDemoHost } from './data/clients';
+import { DemoPrologue } from './components/DemoPrologue';
+import { DemoGuide } from './components/DemoGuide';
+import { OwnerInbox } from './components/OwnerInbox';
 
 export function App() {
   const [currentClient, setCurrentClient] = useState(DEFAULT_CLIENT);
   const modules = useMemo(() => getModules(currentClient), [currentClient]);
   const [leadModalOpen, setLeadModalOpen] = useState(false);
   const [leadContext, setLeadContext] = useState(null);
+  // Prospect-facing demo layer (sample profiles only, never in embed mode):
+  // prologue explains what the demo proves, the guide walks the working
+  // flows, the owner inbox shows what the studio receives.
+  const [prologueOpen, setPrologueOpen] = useState(false);
+  const [guideVisible, setGuideVisible] = useState(false);
+  const [ownerInboxOpen, setOwnerInboxOpen] = useState(false);
   const [onboardModalOpen, setOnboardModalOpen] = useState(false);
 
   // Initialize client from Subdomain or URL Query parameter
@@ -74,6 +83,33 @@ export function App() {
     }
   }, []);
 
+  // Auto-open the prologue once per session for sample (demo) profiles.
+  useEffect(() => {
+    if (isEmbed || !currentClient.isSample) return;
+    try {
+      if (!sessionStorage.getItem('omnistu_demo_prologue_seen')) {
+        setPrologueOpen(true);
+      }
+    } catch { /* storage blocked -> still show */ setPrologueOpen(true); }
+  }, [isEmbed, currentClient]);
+
+  const closePrologue = () => {
+    setPrologueOpen(false);
+    try { sessionStorage.setItem('omnistu_demo_prologue_seen', '1'); } catch { /* non-blocking */ }
+  };
+
+  const startGuidedTour = () => {
+    closePrologue();
+    setGuideVisible(true);
+  };
+
+  const handleGuideAction = (action) => {
+    if (!action) return;
+    if (action.type === 'scroll') scrollToSection(action.target);
+    else if (action.type === 'enquiry') handleOpenLeadModal({ intent: 'guided_tour_test' });
+    else if (action.type === 'ownerInbox') setOwnerInboxOpen(true);
+  };
+
   // Report height to the parent page so the iframe can auto-resize
   useEffect(() => {
     if (!isEmbed || typeof window === 'undefined' || window.parent === window) return;
@@ -118,6 +154,7 @@ export function App() {
         onSelectClient={handleSelectClient}
         onOpenOnboard={() => setOnboardModalOpen(true)}
         onBookConsult={() => handleOpenLeadModal({ intent: 'direct_consultation' })}
+        onOpenGuide={() => setPrologueOpen(true)}
       />
 
       {/* Main Experience */}
@@ -173,6 +210,28 @@ export function App() {
           setCurrentClient(newClient);
         }}
       />
+
+      {/* Prospect demo layer: sample profiles only */}
+      {currentClient.isSample && (
+        <>
+          <DemoPrologue
+            isOpen={prologueOpen}
+            onClose={closePrologue}
+            onStartTour={startGuidedTour}
+            client={currentClient}
+          />
+          <DemoGuide
+            visible={guideVisible}
+            onClose={() => setGuideVisible(false)}
+            onAction={handleGuideAction}
+          />
+          <OwnerInbox
+            isOpen={ownerInboxOpen}
+            onClose={() => setOwnerInboxOpen(false)}
+            client={currentClient}
+          />
+        </>
+      )}
 
     </div>
   );

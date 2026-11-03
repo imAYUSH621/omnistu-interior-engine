@@ -59,7 +59,7 @@ describe('Link-configured demo endpoints', () => {
     fillForm();
     giveDemoConsent();
     submit();
-    expect(await screen.findByText(/CRM handoff: accepted by the configured CRM endpoint/i)).toBeDefined();
+    expect(await screen.findByText(/Handoff: accepted by the demo test endpoint \(not a CRM\)/i)).toBeDefined();
     const urls = global.fetch.mock.calls.map(c => c[0]);
     expect(urls).toContain('https://sink.example/hook');
     expect(urls).toContain('https://crm.example/hook');

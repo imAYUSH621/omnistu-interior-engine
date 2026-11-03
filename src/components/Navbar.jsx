@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Sparkles, Phone, MessageCircle, Calendar, ChevronDown, PlusCircle, Building2 } from 'lucide-react';
+import { Sparkles, Phone, MessageCircle, Calendar, ChevronDown, PlusCircle, Building2, BookOpen } from 'lucide-react';
 import { PRESET_CLIENTS } from '../data/clients';
 
-export function Navbar({ client, onSelectClient, onOpenOnboard, onBookConsult }) {
+export function Navbar({ client, onSelectClient, onOpenOnboard, onBookConsult, onOpenGuide }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
@@ -31,7 +31,18 @@ export function Navbar({ client, onSelectClient, onOpenOnboard, onBookConsult })
 
         {/* Right CTA Actions & Multi-Tenant Switcher */}
         <div className="flex items-center space-x-2 sm:space-x-4">
-          
+
+          {/* Demo explanation entry point (sample profiles only) */}
+          {client.isSample && onOpenGuide && (
+            <button
+              onClick={onOpenGuide}
+              className="hidden md:flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-brand-500/15 border border-brand-500/40 text-brand-200 hover:bg-brand-500/25 text-xs font-mono transition"
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>How this works</span>
+            </button>
+          )}
+
           {/* Client Switcher Selector */}
           <div className="relative">
             <button
