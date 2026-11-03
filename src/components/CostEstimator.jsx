@@ -32,10 +32,25 @@ const TIERS = [
   }
 ];
 
+// Per-client estimator configuration (reusable module): a client profile can
+// carry its own currency, locale and price bands. Absent config falls back to
+// the US-dollar reference bands. All figures remain illustrative estimates.
+const DEFAULT_ESTIMATOR_CONFIG = { currency: '$', locale: 'en-US', tiers: TIERS };
+
 export function CostEstimator({ client, onOpenLeadModal }) {
+  const estimatorConfig = (client && client.estimator && Array.isArray(client.estimator.tiers) && client.estimator.tiers.length > 0)
+    ? { ...DEFAULT_ESTIMATOR_CONFIG, ...client.estimator }
+    : DEFAULT_ESTIMATOR_CONFIG;
+  const tiers = estimatorConfig.tiers;
+  const fmt = (n) => `${estimatorConfig.currency}${n.toLocaleString(estimatorConfig.locale)}`;
+
+  // State holds ids, not config objects: when the active client changes the
+  // derived tier is re-resolved from the NEW client's bands, so a stale tier
+  // from the previous profile can never price the estimate.
   const [selectedScope, setSelectedScope] = useState(SCOPES[0]);
   const [sqft, setSqft] = useState(selectedScope.defaultSqft);
-  const [selectedTier, setSelectedTier] = useState(TIERS[1]);
+  const [selectedTierId, setSelectedTierId] = useState(null);
+  const selectedTier = tiers.find(t => t.id === selectedTierId) || tiers[1] || tiers[0];
 
   // Calculate dynamic investment range
   const rawBase = sqft * selectedTier.pricePerSqft * selectedScope.baseMult;
@@ -128,10 +143,10 @@ export function CostEstimator({ client, onOpenLeadModal }) {
                 3. Architectural Finish Grade
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {TIERS.map((tier) => (
+                {tiers.map((tier) => (
                   <button
                     key={tier.id}
-                    onClick={() => setSelectedTier(tier)}
+                    onClick={() => setSelectedTierId(tier.id)}
                     className={`p-4 rounded-xl border text-left transition flex flex-col justify-between ${
                       selectedTier.id === tier.id
                         ? 'bg-brand-500/20 border-brand-400 text-white shadow-lg'
@@ -141,7 +156,7 @@ export function CostEstimator({ client, onOpenLeadModal }) {
                     <div>
                       <div className="font-bold text-xs sm:text-sm text-white">{tier.name}</div>
                       <div className="text-[11px] text-brand-400 font-mono mt-0.5">
-                        ~${tier.pricePerSqft}/sq ft
+                        ~{fmt(tier.pricePerSqft)}/sq ft
                       </div>
                       <p className="text-[11px] text-zinc-400 mt-2 leading-relaxed">
                         {tier.tagline}
@@ -167,7 +182,7 @@ export function CostEstimator({ client, onOpenLeadModal }) {
             {/* Hero Number Display */}
             <div>
               <div className="text-3xl sm:text-4xl font-extrabold font-display text-white tracking-tight">
-                ${lowEstimate.toLocaleString()} – ${highEstimate.toLocaleString()}
+                {fmt(lowEstimate)} – {fmt(highEstimate)}
               </div>
               <p className="text-xs text-zinc-400 mt-1">
                 Estimated duration: <span className="text-white font-semibold">{selectedScope.duration}</span> from demolition to turnkey delivery.
@@ -184,7 +199,7 @@ export function CostEstimator({ client, onOpenLeadModal }) {
                 <div>
                   <div className="flex justify-between text-zinc-300 mb-1">
                     <span>Design, Architecture & Permitting (15%)</span>
-                    <span className="font-mono">${designFee.toLocaleString()}</span>
+                    <span className="font-mono">{fmt(designFee)}</span>
                   </div>
                   <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
                     <div className="h-full bg-brand-400 rounded-full" style={{ width: '15%' }} />
@@ -194,7 +209,7 @@ export function CostEstimator({ client, onOpenLeadModal }) {
                 <div>
                   <div className="flex justify-between text-zinc-300 mb-1">
                     <span>Stone, Custom Millwork & Materials (55%)</span>
-                    <span className="font-mono">${materials.toLocaleString()}</span>
+                    <span className="font-mono">{fmt(materials)}</span>
                   </div>
                   <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
                     <div className="h-full bg-amber-400 rounded-full" style={{ width: '55%' }} />
@@ -204,7 +219,7 @@ export function CostEstimator({ client, onOpenLeadModal }) {
                 <div>
                   <div className="flex justify-between text-zinc-300 mb-1">
                     <span>Licensed Trade Craftsmanship & Installation (30%)</span>
-                    <span className="font-mono">${labor.toLocaleString()}</span>
+                    <span className="font-mono">{fmt(labor)}</span>
                   </div>
                   <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
                     <div className="h-full bg-emerald-400 rounded-full" style={{ width: '30%' }} />
@@ -229,7 +244,7 @@ export function CostEstimator({ client, onOpenLeadModal }) {
               onClick={() => onOpenLeadModal({
                 room: selectedScope.name,
                 style: selectedTier.name,
-                budget: `$${lowEstimate.toLocaleString()} - $${highEstimate.toLocaleString()}`,
+                budget: `${fmt(lowEstimate)} - ${fmt(highEstimate)}`,
                 sqft: `${sqft} sq ft`
               })}
               className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-sm tracking-wide shadow-xl shadow-brand-500/25 transition active:scale-95 flex items-center justify-center space-x-2"
