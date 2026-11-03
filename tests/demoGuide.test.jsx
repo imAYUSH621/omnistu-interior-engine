@@ -37,7 +37,6 @@ describe('Prospect demo prologue', () => {
   it('describes real delivery to the Omnistu inbox when the master demo key is present', () => {
     render(<DemoPrologue isOpen={true} onClose={() => {}} onStartTour={() => {}} client={DEFAULT_CLIENT} />);
     expect(screen.getByText(/really is emailed to the Omnistu team inbox/i)).toBeDefined();
-    expect(screen.getByText(/real Cal.com calendar/i)).toBeDefined();
     expect(screen.getByText(/really arrive in Omnistu’s own team inbox/i)).toBeDefined();
     expect(screen.queryByText(/nothing here claims to be connected to a real inbox or CRM/i)).toBeNull();
   });

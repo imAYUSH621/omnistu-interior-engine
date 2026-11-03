@@ -42,7 +42,7 @@ const OFFERS = [
 
 const SETUP_DEPENDENT = [
   'Enquiry delivery to your business email (needs a free Web3Forms key we set up with you)',
-  'Consultation booking on your studio\u2019s own calendar (the master demo already books Omnistu\u2019s real Cal.com)',
+  'Consultation booking on your real calendar (needs your free Cal.com account)',
   'Your own domain (e.g. yourstudio.com)',
   'CRM handoff (generic connector, verified against your CRM during setup)'
 ];
