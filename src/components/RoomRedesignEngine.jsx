@@ -297,7 +297,11 @@ export function RoomRedesignEngine({ client, onOpenLeadModal }) {
                 {customImage ? 'YOUR PHOTO (NOT ANALYZED)' : 'SAMPLE ROOM (REFERENCE)'}
               </div>
               <div className="absolute top-4 right-4 px-3 py-1 rounded-lg bg-brand-500/90 backdrop-blur-md text-[11px] font-mono text-white border border-brand-400 font-semibold shadow-lg">
-                {isAiRendered ? `AI CONCEPT (${selectedStyle.name.toUpperCase()})` : 'SAMPLE PHOTO (AI BUSY)'}
+                {isAiRendered
+                  ? `AI CONCEPT (${selectedStyle.name.toUpperCase()})`
+                  : aiStatus === 'unavailable'
+                    ? 'SAMPLE PHOTO (AI BUSY)'
+                    : 'SAMPLE PHOTO (GENERATE AI CONCEPT)'}
               </div>
 
               {/* Loading Overlay */}

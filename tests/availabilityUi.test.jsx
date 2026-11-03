@@ -37,6 +37,18 @@ describe('Availability-aware engine UI', () => {
     expect(screen.queryByText(/the AI concept is generated from your style choices only/i)).toBeNull();
   });
 
+  it('labels the pre-generation sample photo honestly when the generator is up', async () => {
+    checkGeneratorAvailability.mockResolvedValue(true);
+    render(<RoomRedesignEngine client={client} onOpenLeadModal={() => {}} />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Generate My Free Design Concept/i)).toBeDefined();
+    });
+    // before any generation the viewport must not claim the AI is busy
+    expect(screen.getByText(/SAMPLE PHOTO \(GENERATE AI CONCEPT\)/i)).toBeDefined();
+    expect(screen.queryByText(/SAMPLE PHOTO \(AI BUSY\)/i)).toBeNull();
+  });
+
   it('keeps the standard CTA and no warning when the generator is up', async () => {
     checkGeneratorAvailability.mockResolvedValue(true);
     render(<RoomRedesignEngine client={client} onOpenLeadModal={() => {}} />);
