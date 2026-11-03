@@ -38,7 +38,7 @@ describe('Client-dependent module gating in the enquiry flow', () => {
     global.fetch = vi.fn().mockResolvedValue({ ok: true });
     render(<LeadModal isOpen={true} onClose={() => {}} client={base} contextData={{}} />);
     submitDemo();
-    expect(await screen.findByText(/Request Received!/i)).toBeDefined();
+    expect(await screen.findByText(/Request Accepted by Delivery Service/i)).toBeDefined();
     expect(await screen.findByText(/CRM handoff: not configured/i)).toBeDefined();
   });
 
@@ -61,7 +61,7 @@ describe('Client-dependent module gating in the enquiry flow', () => {
     );
     render(<LeadModal isOpen={true} onClose={() => {}} client={client} contextData={{}} />);
     submitDemo();
-    expect(await screen.findByText(/Request Received!/i)).toBeDefined();
+    expect(await screen.findByText(/Request Accepted by Delivery Service/i)).toBeDefined();
     expect(await screen.findByText(/CRM handoff failed/i)).toBeDefined();
   });
 });
@@ -73,15 +73,38 @@ describe('Visitor analytics consent notice', () => {
   it('shows the consent notice when analytics is configured and hides it after a choice', async () => {
     const client = { ...base, analyticsEndpoint: 'https://a.example/collect' };
     render(<LeadModal isOpen={true} onClose={() => {}} client={client} contextData={{}} />);
-    expect(screen.getByText(/Allow anonymous usage events/i)).toBeDefined();
+    expect(screen.getByText(/Allow usage events/i)).toBeDefined();
 
     fireEvent.click(screen.getByText(/No thanks/i));
-    expect(screen.queryByText(/Allow anonymous usage events/i)).toBeNull();
+    expect(screen.queryByText(/Allow usage events/i)).toBeNull();
     expect(localStorage.getItem('omnistu_analytics_consent:omnistu-demo')).toBe('declined');
   });
 
   it('does not show the notice when analytics is not configured', () => {
     render(<LeadModal isOpen={true} onClose={() => {}} client={base} contextData={{}} />);
-    expect(screen.queryByText(/Allow anonymous usage events/i)).toBeNull();
+    expect(screen.queryByText(/Allow usage events/i)).toBeNull();
+  });
+});
+
+describe('Consent withdrawal', () => {
+  beforeEach(() => { localStorage.clear(); });
+  afterEach(() => { vi.unstubAllEnvs(); vi.restoreAllMocks(); });
+
+  it('offers an explicit Withdraw control that persists decline and blocks future events', async () => {
+    const client = { ...base, analyticsEndpoint: 'https://a.example/collect' };
+    render(<LeadModal isOpen={true} onClose={() => {}} client={client} contextData={{}} />);
+
+    fireEvent.click(screen.getByText(/^Allow$/i));
+    expect(screen.getByText(/Usage events are on - no contact details are sent/i)).toBeDefined();
+    expect(localStorage.getItem('omnistu_analytics_consent:omnistu-demo')).toBe('accepted');
+
+    fireEvent.click(screen.getByText(/^Withdraw$/i));
+    expect(localStorage.getItem('omnistu_analytics_consent:omnistu-demo')).toBe('declined');
+    expect(screen.queryByText(/Usage events are on/i)).toBeNull();
+
+    global.fetch = vi.fn().mockResolvedValue({ ok: true });
+    const { trackEvent } = await import('../src/services/analyticsEvents');
+    expect(trackEvent(client, 'whatsapp_clicked')).toBe('skipped');
+    expect(global.fetch).not.toHaveBeenCalled();
   });
 });

@@ -24,7 +24,7 @@ describe('Lead delivery honesty', () => {
     render(<LeadModal isOpen={true} onClose={() => {}} client={liveClient} contextData={{ room: 'Living Pavilion' }} />);
     fillAndSubmit();
 
-    expect(await screen.findByText(/Request Received!/i)).toBeDefined();
+    expect(await screen.findByText(/Request Accepted by Delivery Service/i)).toBeDefined();
     expect(global.fetch).toHaveBeenCalledWith('https://example.com/hook', expect.objectContaining({ method: 'POST' }));
     expect(screen.getByText(/Chat Instantly on WhatsApp/i)).toBeDefined();
   });
@@ -38,7 +38,7 @@ describe('Lead delivery honesty', () => {
     fillAndSubmit();
 
     expect(await screen.findByText(/Sending Failed/i)).toBeDefined();
-    expect(screen.queryByText(/Request Received!/i)).toBeNull();
+    expect(screen.queryByText(/Request Accepted by Delivery Service/i)).toBeNull();
   });
 
   it('shows a booking link only when VITE_BOOKING_URL is configured', async () => {
@@ -86,7 +86,7 @@ describe('Native Web3Forms delivery', () => {
     render(<LeadModal isOpen={true} onClose={() => {}} client={{ ...liveClient, web3formsKey: '' }} contextData={{ room: 'Living Pavilion' }} />);
     fillAndSubmit();
 
-    expect(await screen.findByText(/Request Received!/i)).toBeDefined();
+    expect(await screen.findByText(/Request Accepted by Delivery Service/i)).toBeDefined();
     const [url, opts] = global.fetch.mock.calls[0];
     expect(url).toBe('https://api.web3forms.com/submit');
     const body = JSON.parse(opts.body);
@@ -110,7 +110,7 @@ describe('Native Web3Forms delivery', () => {
     render(<LeadModal isOpen={true} onClose={() => {}} client={{ ...liveClient, web3formsKey: 'client-key-9' }} contextData={{}} />);
     fillAndSubmit();
 
-    expect(await screen.findByText(/Request Received!/i)).toBeDefined();
+    expect(await screen.findByText(/Request Accepted by Delivery Service/i)).toBeDefined();
     expect(JSON.parse(global.fetch.mock.calls[0][1].body).access_key).toBe('client-key-9');
   });
 
@@ -121,7 +121,7 @@ describe('Native Web3Forms delivery', () => {
     render(<LeadModal isOpen={true} onClose={() => {}} client={{ ...liveClient, web3formsKey: 'k', calLink: 'studio/demo-call' }} contextData={{}} />);
     fillAndSubmit();
 
-    expect(await screen.findByText(/Request Received!/i)).toBeDefined();
+    expect(await screen.findByText(/Request Accepted by Delivery Service/i)).toBeDefined();
     await waitFor(() => {
       expect(window.Cal).toHaveBeenCalledWith('inline', expect.objectContaining({ calLink: 'studio/demo-call' }));
     });
@@ -134,7 +134,7 @@ describe('Native Web3Forms delivery', () => {
     render(<LeadModal isOpen={true} onClose={() => {}} client={{ ...liveClient, web3formsKey: 'k', calLink: '' }} contextData={{}} />);
     fillAndSubmit();
 
-    expect(await screen.findByText(/Request Received!/i)).toBeDefined();
+    expect(await screen.findByText(/Request Accepted by Delivery Service/i)).toBeDefined();
     expect(screen.queryByText(/Book a Consultation Slot/i)).toBeNull();
   });
 });

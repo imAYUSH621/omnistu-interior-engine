@@ -60,8 +60,9 @@ Each client profile in `src/data/clients.js` can carry:
   app POST coarse events (`enquiry_submitted`, `booking_clicked`,
   `whatsapp_clicked`) containing only `{ event, clientId, at }` - never
   names, phone numbers, emails or other personal payload. Declining stores
-  that choice and blocks all events; a configured endpoint alone (the site
-  owner's choice) never fires anything.
+  that choice and blocks all events; an explicit Withdraw button turns them
+  back off at any time. A configured endpoint alone (the site owner's
+  choice) never fires anything.
 
 ## 4. Honesty notes
 
