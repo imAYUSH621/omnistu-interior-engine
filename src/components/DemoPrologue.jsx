@@ -43,7 +43,7 @@ export function DemoPrologue({ isOpen, onClose, onStartTour, client }) {
           <X className="w-5 h-5" />
         </button>
 
-        <p className="text-[11px] font-mono uppercase tracking-widest text-brand-300">
+        <p className="pr-10 text-[11px] font-mono uppercase tracking-widest text-brand-300">
           Live product demo • for interior design businesses
         </p>
         <h2 className="mt-2 text-2xl sm:text-3xl font-bold font-display text-white tracking-tight">
