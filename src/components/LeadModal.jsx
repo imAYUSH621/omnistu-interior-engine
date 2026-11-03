@@ -22,7 +22,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
   const [delivery, setDelivery] = useState(null); // 'sent' | 'failed' | 'demo'
   // CRM handoff is a separate state from delivery: provider acceptance is not
   // inbox receipt, and neither is CRM sync.
-  const [crmSync, setCrmSync] = useState(null); // null | 'skipped' | 'synced' | 'failed'
+  const [crmSync, setCrmSync] = useState(null); // null | 'skipped' | 'synced' | 'failed' | 'unknown'
   // Visitor analytics consent: null = no choice yet (notice shown when the
   // studio has analytics configured), true/false = explicit choice.
   const [analyticsConsent, setAnalyticsConsentState] = useState(() => getAnalyticsConsent(client));
@@ -306,7 +306,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
               <p className="text-xs text-zinc-300 mt-2 max-w-sm mx-auto leading-relaxed">
                 {delivery === 'sent' ? (
                   demoEndpointActive ? (
-                    <>Thank you, <span className="font-semibold text-white">{formData.name}</span>. Your test enquiry was delivered to the demo destination <span className="font-mono text-amber-200">{demoEndpointHost}</span> - a test sink from the shared link, not the studio's CRM. This sample studio has no team, so nobody will contact you from this demo.</>
+                    <>Thank you, <span className="font-semibold text-white">{formData.name}</span>. Your test enquiry was accepted by the configured delivery service. The link-supplied handoff destination is <span className="font-mono text-amber-200">{demoEndpointHost}</span> - a test sink from the shared link, not the studio's CRM. Its separate handoff outcome is shown below. This sample studio has no team, so nobody will contact you from this demo.</>
                   ) : (
                   <>Thank you, <span className="font-semibold text-white">{formData.name}</span>. The delivery service has accepted your request for <span className="text-brand-300">{client.name}</span>. Acceptance by the service is not confirmation that the studio team has seen it yet - they follow up from their inbox.</>
                   )
@@ -321,11 +321,15 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
                   {demoEndpointActive
                     ? (crmSync === 'synced'
                         ? 'Handoff: accepted by the demo test endpoint (not a CRM).'
+                        : crmSync === 'unknown'
+                          ? 'Demo handoff outcome unknown - check the destination before retrying. Your email delivery was already accepted; do not resend the whole enquiry.'
                         : crmSync === 'failed'
                           ? 'Demo handoff endpoint failed - your test enquiry was still accepted by the delivery service above.'
                           : 'Handoff endpoint: not configured in this demo link.')
                     : (crmSync === 'synced'
                         ? 'CRM handoff: accepted by the configured CRM endpoint.'
+                        : crmSync === 'unknown'
+                          ? 'CRM handoff outcome unknown - the record may already exist. Check the CRM before retrying; do not resend the accepted email enquiry.'
                         : crmSync === 'failed'
                           ? 'CRM handoff failed - your request was still accepted by the delivery service above.'
                           : 'CRM handoff: not configured for this studio yet.')}

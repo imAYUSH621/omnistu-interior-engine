@@ -59,3 +59,18 @@ the evidence flags; this tool is a checklist, NOT an independent service audit.
 
 CRM has its own `modules.crm` switch now, so email delivery can stay enabled
 while CRM handoff stays disabled, even if an old endpoint is still configured.
+
+## Failed-handoff reconciliation
+
+The email provider accepting a request is independent of the CRM handoff. A
+CRM network timeout or 5xx response is now `unknown`, not proof the record was
+not created: the destination may have committed before its reply was lost.
+The browser aborts the handoff after eight seconds and surfaces this uncertainty.
+It never automatically replays or resends the already-accepted email.
+
+Reconcile in the actual CRM before any manual retry. A durable retry queue,
+exactly-once delivery or automatic reconciliation is NOT implemented. Those
+require the selected CRM's lookup/idempotency semantics, approved durable
+storage, authentication, access rules and retention policy. Adding a local
+queue of contact data without those choices would create a new privacy and
+duplicate-delivery risk. No extra lead journal/storage was added for this fix.

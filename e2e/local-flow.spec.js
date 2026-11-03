@@ -52,8 +52,9 @@ test('master email acceptance and CRM failure remain separate, all requests mock
   await page.getByRole('checkbox').check();
   await request(page);
   await expect(page.getByText('Request Accepted by Delivery Service', { exact: true })).toBeVisible();
-  await expect(page.getByText(/Demo handoff endpoint failed/)).toBeVisible();
+  await expect(page.getByText(/Demo handoff outcome unknown/)).toBeVisible();
   expect(sent).toBe(1); expect(crm).toBe(1);
+  await page.screenshot({ path: 'test-results/local-handoff-unknown.png' });
 });
 
 test('delivery rejection never attempts CRM or claims acceptance', async ({ page }) => {

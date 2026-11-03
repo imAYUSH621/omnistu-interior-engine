@@ -23,6 +23,6 @@ describe('handoffLeadToCrm', () => {
     const notOk = vi.fn().mockResolvedValue({ ok: false });
     expect(await handoffLeadToCrm({ endpoint: 'https://crm.example/hook', lead, fetchImpl: notOk })).toBe('failed');
     const boom = vi.fn().mockRejectedValue(new Error('network down'));
-    expect(await handoffLeadToCrm({ endpoint: 'https://crm.example/hook', lead, fetchImpl: boom })).toBe('failed');
+    expect(await handoffLeadToCrm({ endpoint: 'https://crm.example/hook', lead, fetchImpl: boom })).toBe('unknown');
   });
 });
