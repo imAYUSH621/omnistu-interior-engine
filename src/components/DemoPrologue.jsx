@@ -34,7 +34,7 @@ export function DemoPrologue({ isOpen, onClose, onStartTour, client }) {
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl p-6 sm:p-8">
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto gradient-ring rounded-2xl shadow-[0_24px_80px_-16px_rgba(0,0,0,0.8)] p-6 sm:p-8">
         <button
           onClick={onClose}
           aria-label="Close demo introduction"

@@ -16,19 +16,20 @@ export function Hero({ client, modules, onLaunchRedesign, onLaunchEstimator }) {
   return (
     <section className="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden border-b border-white/5">
       {/* Subtle Background Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-brand-500/10 blur-[130px] rounded-full pointer-events-none -z-10" />
-      <div className="absolute top-10 right-10 w-72 h-72 bg-luxury-gold/5 blur-[100px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(680px,90vw)] h-[380px] bg-brand-500/30 blur-[130px] rounded-full pointer-events-none -z-10 glow-drift" />
+      <div className="absolute top-10 right-10 w-72 h-72 bg-luxury-gold/15 blur-[100px] rounded-full pointer-events-none -z-10 glow-drift-alt" />
+      <div className="absolute bottom-0 left-8 w-80 h-64 bg-brand-700/15 blur-[110px] rounded-full pointer-events-none -z-10 glow-drift-alt" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         
         {/* Trust Pill / Verification Badge */}
-        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-brand-500/30 text-brand-300 text-xs font-mono mb-8 shadow-inner animate-in fade-in">
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-zinc-900/80 gradient-ring text-brand-200 text-xs font-mono mb-8 shadow-[0_0_24px_rgba(163,132,97,0.18)] animate-in fade-in">
           <Award className="w-4 h-4 text-brand-400" />
           <span>{client.badge}</span>
         </div>
 
         {/* Dynamic Client Headline */}
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight font-display text-white max-w-5xl mx-auto leading-[1.12]">
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight font-display text-gradient-gold max-w-5xl mx-auto leading-[1.12]">
           {aiDown ? 'Explore Interior Design Concepts for Your Space' : client.heroHeadline}
         </h1>
 
@@ -44,7 +45,7 @@ export function Hero({ client, modules, onLaunchRedesign, onLaunchEstimator }) {
           {showRedesign && (
           <button
             onClick={onLaunchRedesign}
-            className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-base shadow-xl shadow-brand-500/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center space-x-3 group"
+            className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-400 via-brand-500 to-brand-700 hover:from-brand-300 hover:via-brand-400 hover:to-brand-600 text-white font-semibold text-base shadow-[0_10px_36px_-6px_rgba(163,132,97,0.55)] transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center space-x-3 group"
           >
             <Sparkles className="w-5 h-5 text-amber-200" />
             <span>{aiDown ? 'Browse Design Concepts' : 'Launch Free AI Design Concept'}</span>

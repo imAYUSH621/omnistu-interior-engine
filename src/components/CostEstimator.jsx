@@ -72,7 +72,7 @@ export function CostEstimator({ client, onOpenLeadModal }) {
             <Calculator className="w-3.5 h-3.5" />
             <span>Transparent Investment Estimator</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold font-display text-white tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-extrabold font-display text-gradient-gold tracking-tight">
             Calculate Your Renovation Investment in Real Time
           </h2>
           <p className="mt-4 text-base sm:text-lg text-zinc-400 font-light">
@@ -170,7 +170,7 @@ export function CostEstimator({ client, onOpenLeadModal }) {
           </div>
 
           {/* Results Summary Box */}
-          <div className="lg:col-span-5 bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-950 p-6 sm:p-8 rounded-2xl border border-brand-500/30 shadow-2xl space-y-6">
+          <div className="lg:col-span-5 bg-gradient-to-br from-zinc-900 via-[#14110d] to-zinc-950 p-6 sm:p-8 rounded-2xl gradient-ring shadow-[0_18px_60px_-18px_rgba(163,132,97,0.35)] space-y-6">
             
             <div className="flex items-center justify-between pb-4 border-b border-zinc-800">
               <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Estimated Investment Band</span>
