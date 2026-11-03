@@ -20,8 +20,8 @@ export function OwnerInbox({ isOpen, onClose, client }) {
   const [leads, setLeads] = useState([]);
 
   useEffect(() => {
-    if (isOpen) setLeads(readDemoLeads());
-  }, [isOpen]);
+    if (isOpen) setLeads(readDemoLeads().filter(lead => lead.client === client.name));
+  }, [isOpen, client.name]);
 
   if (!isOpen) return null;
 

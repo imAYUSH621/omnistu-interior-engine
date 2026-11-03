@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { X, CheckCircle, MessageCircle, ArrowRight, ShieldCheck, Phone, Mail, User, Clock } from 'lucide-react';
 import { CalEmbed } from './CalEmbed';
 import { getModules } from '../data/clients';
@@ -13,6 +13,8 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
     timeline: 'Within 1-2 Months',
     notes: ''
   });
+  const submitLock = useRef(false);
+  const [sending, setSending] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   // Explicit visitor consent before anything is sent to a link-supplied demo
   // endpoint. Required only in that mode; trusted config paths don't ask.
@@ -61,6 +63,9 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
     if (demoEndpointActive && !demoConsent) return;
+    if (submitLock.current) return;
+    submitLock.current = true;
+    setSending(true);
 
     // Save locally for persistence
     const newLead = {
@@ -141,6 +146,8 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
     }
 
     setSubmitted(true);
+    setSending(false);
+    submitLock.current = false;
   };
 
   const whatsappMessage = encodeURIComponent(
@@ -267,10 +274,10 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
 
               <button
                 type="submit"
-                disabled={demoEndpointActive && !demoConsent}
+                disabled={sending || (demoEndpointActive && !demoConsent)}
                 className="w-full py-3.5 mt-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-xs tracking-wider uppercase transition shadow-xl shadow-brand-500/25 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
               >
-                Request My Free Consultation
+                {sending ? 'Sending request...' : 'Request My Free Consultation'}
               </button>
             </form>
 

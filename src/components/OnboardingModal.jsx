@@ -51,7 +51,7 @@ export function OnboardingModal({ isOpen, onClose, onClientCreated }) {
       phone: phone || '',
       tagline: tagline
     });
-    const url = `${window.location.origin}/?${params.toString()}`;
+    const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
     setGeneratedUrl(url);
     onClientCreated(newProfile);
   };

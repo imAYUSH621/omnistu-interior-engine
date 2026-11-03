@@ -74,6 +74,7 @@ describe('Owner inbox (studio owner view)', () => {
 
   it('renders a submitted enquiry exactly as the studio would receive it', () => {
     localStorage.setItem('omnistu_leads', JSON.stringify([{
+      client: sampleClient.name,
       name: 'Demo Visitor',
       phone: '+1 (555) 000-1234',
       email: 'demo@example.com',
