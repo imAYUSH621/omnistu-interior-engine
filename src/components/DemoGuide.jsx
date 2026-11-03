@@ -8,7 +8,7 @@ const STEPS = [
   {
     icon: Sparkles,
     title: 'Try the AI concept',
-    benefit: 'Your visitor gets a real generated concept in seconds',
+    benefit: 'Your visitor gets a real generated concept - free, timing varies',
     action: { type: 'scroll', target: 'room-redesign' }
   },
   {
