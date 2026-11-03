@@ -60,3 +60,8 @@ describe('Platform demo hosts', () => {
 it('does not market the style-only concept demo as an interactive 3D service', () => {
   expect(PRESET_CLIENTS['del-air'].heroHeadline).not.toMatch(/3D/i);
 });
+
+it('never gives arbitrary shared-link studios the master email connector', () => {
+  expect(getClientProfile('unconfigured-studio').web3formsKey).toBe('');
+  expect(getClientProfile('custom-studio', new URLSearchParams('name=Custom Studio')).web3formsKey).toBe('');
+});

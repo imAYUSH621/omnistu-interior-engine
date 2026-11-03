@@ -232,8 +232,8 @@ export const DEFAULT_CLIENT = {
   // web3formsKey: '' - a real studio's key is set up per client.
   web3formsKey: '3928251b-2cd5-4485-8a9b-00abf5790826',
   // Master demo booking: Omnistu's Cal.com account is set up (free plan,
-  // event "Free Design Consultation") but the event is hidden and calLink
-  // stays empty until the user confirms availability, duration and medium.
+  // event "Free Design Consultation") but ALL seven days have zero hours;
+  // hidden only unlists the link. calLink stays empty until the user confirms availability, duration and medium.
   calLink: '',
   crmWebhookUrl: '',
   analyticsEndpoint: '',
@@ -269,6 +269,7 @@ export function getClientProfile(slugOrQuery, searchParams = null) {
     if (customName) {
       return {
         ...DEFAULT_CLIENT,
+        web3formsKey: '', calLink: '', crmWebhookUrl: '', analyticsEndpoint: '',
         id: cleanKey,
         name: customName,
         city: customCity || 'Your Local Area',
@@ -298,6 +299,7 @@ export function getClientProfile(slugOrQuery, searchParams = null) {
   const generatedName = cleanKey.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
   return {
     ...DEFAULT_CLIENT,
+    web3formsKey: '', calLink: '', crmWebhookUrl: '', analyticsEndpoint: '',
     isSample: true,
     id: cleanKey,
     name: generatedName,

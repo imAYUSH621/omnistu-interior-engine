@@ -22,3 +22,7 @@ coverage/
 
 # GitHub Pages deploy output
 dist-pages/
+
+# Local browser acceptance output
+test-results/
+playwright-report/
