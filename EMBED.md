@@ -64,7 +64,16 @@ Each client profile in `src/data/clients.js` can carry:
   back off at any time. A configured endpoint alone (the site owner's
   choice) never fires anything.
 
-## 4. Honesty notes
+## 4. Link-configured live demo (no rebuild)
+
+Append `?leadEndpoint=URL` (and optionally `&crmWebhook=URL`) to any engine
+link to point the enquiry form and CRM handoff at a real endpoint for a
+demo - e.g. a free webhook sink - without rebuilding. The destination host
+is shown to the visitor in the form. No secrets belong in these URLs: use
+them only with endpoints that accept unauthenticated POSTs, and only with
+demo data until the client's real data handling is approved.
+
+## 5. Honesty notes
 
 - Visitor photos stay on the page and are never sent or analyzed; the AI
   concept is generated from style choices only (free Pollinations tier).
