@@ -84,6 +84,56 @@ export const PRESET_CLIENTS = {
     projectsCompleted: '280+',
     avgRating: '5.0',
     featuredStyle: 'Japandi Serenity & Calacatta Stone'
+  },
+  'arcline-interiors': {
+    id: 'arcline-interiors',
+    name: 'Arcline Interiors & Turnkey Studio',
+    city: 'Jaipur & Delhi NCR',
+    phone: '',
+    whatsapp: '',
+    web3formsKey: '',
+    calLink: '',
+    crmWebhookUrl: '',
+    analyticsEndpoint: '',
+    email: '',
+    tagline: 'Full-Home Interiors, Modular Kitchens & Turnkey Renovation',
+    heroHeadline: 'See Your Home Reimagined Before You Spend a Rupee',
+    heroSubheadline: 'AI design concepts, transparent per-sq-ft budgeting and direct consultation booking for Indian homes - visualise your space first, decide later.',
+    accentColor: '#b38053',
+    badge: 'Sample demo profile - not a real business',
+    isSample: true,
+    projectsCompleted: '350+',
+    avgRating: '4.9',
+    featuredStyle: 'Warm Contemporary Indian & Japandi',
+    // Illustrative per-sq-ft bands for the Indian market (the estimator always
+    // labels figures as illustrative; final quotes follow a real consultation)
+    estimator: {
+      currency: '₹',
+      locale: 'en-IN',
+      tiers: [
+        {
+          id: 'essential',
+          name: 'Essential Comfort',
+          pricePerSqft: 1500,
+          tagline: 'Quality modular finishes, branded hardware, smart storage',
+          materials: ['Branded Laminates & Hardware', 'Modular Kitchen & Wardrobes', 'False Ceiling with Cove Lighting']
+        },
+        {
+          id: 'premium',
+          name: 'Premium Designer',
+          pricePerSqft: 3000,
+          tagline: 'Designer surfaces, veneer and PU finishes, layered lighting',
+          materials: ['Veneer & PU Duco Finishes', 'Quartz / Granite Counters', 'Designer Lighting & Automation Basics']
+        },
+        {
+          id: 'luxury',
+          name: 'Signature Luxury',
+          pricePerSqft: 5500,
+          tagline: 'Imported stone, bespoke carpentry, full home automation',
+          materials: ['Italian Marble & Imported Stone', 'Bespoke Solid-Wood Carpentry', 'Full Home Automation & AV']
+        }
+      ]
+    }
   }
 };
 

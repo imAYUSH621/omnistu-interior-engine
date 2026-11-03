@@ -23,6 +23,17 @@ describe('Prospect demo prologue', () => {
     expect(screen.getByText(/sample studio with sample data - not a real business/i)).toBeDefined();
   });
 
+  it('makes no claim the demo cannot back: booking shown-not-connected, no blanket everything-works', () => {
+    render(<DemoPrologue isOpen={true} onClose={() => {}} onStartTour={() => {}} client={sampleClient} />);
+    expect(screen.queryByText(/Everything on the page works/i)).toBeNull();
+    // Booking is introduced as shown-but-not-connected in the demo
+    expect(screen.getByText(/shown but not connected/i)).toBeDefined();
+    // Enquiry delivery is claimed only for the live setup, not the demo
+    expect(screen.getByText(/In a live setup the same enquiry is delivered to your business email and CRM automatically/i)).toBeDefined();
+    // The tools that do work are stated as working
+    expect(screen.getByText(/The design and estimate tools really work/i)).toBeDefined();
+  });
+
   it('starts the guided tour from the primary action', () => {
     const onStartTour = vi.fn();
     render(<DemoPrologue isOpen={true} onClose={() => {}} onStartTour={onStartTour} client={sampleClient} />);

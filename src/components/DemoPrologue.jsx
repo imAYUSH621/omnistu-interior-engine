@@ -10,22 +10,22 @@ const FLOWS = [
   {
     icon: Sparkles,
     title: 'AI design concepts',
-    benefit: 'A visitor picks a style and gets a real AI-generated concept in seconds - the hook that turns a casual browser into an engaged prospect.'
+    benefit: 'A visitor picks a style and gets a real AI-generated concept in under a minute - try it on this page. This is the hook that turns a casual browser into an engaged prospect.'
   },
   {
     icon: Calculator,
     title: 'Instant scope & budget',
-    benefit: 'They answer a few questions and see an itemized estimate range - so the enquiry that reaches you is pre-qualified, not cold.'
+    benefit: 'They answer a few questions and see an itemized estimate range - and that room, style and budget travel into the enquiry you receive. Pre-qualified, not cold.'
   },
   {
     icon: Inbox,
     title: 'Enquiries that reach you',
-    benefit: 'Every enquiry arrives structured - name, phone, timeline, budget context - delivered to your inbox and CRM, not lost in DMs.'
+    benefit: 'Send a test enquiry and open the studio owner view: name, phone, timeline and project context together. In a live setup the same enquiry is delivered to your business email and CRM automatically.'
   },
   {
     icon: CalendarCheck,
     title: 'Direct consultation booking',
-    benefit: 'A serious prospect books a consultation slot from the same flow, while the intent is still hot.'
+    benefit: 'The booking step is built into the same flow. In this demo it is shown but not connected; in a live setup it opens your real calendar, so a prospect books while intent is hot.'
   }
 ];
 
@@ -51,7 +51,8 @@ export function DemoPrologue({ isOpen, onClose, onStartTour, client }) {
         </h2>
         <p className="mt-3 text-sm text-zinc-300 leading-relaxed">
           You are looking at the Omnistu engine running as a sample studio, <span className="text-brand-300">{client.name}</span>.
-          Everything on the page works - click through it exactly as your customer would.
+          The design and estimate tools really work - click through them exactly as your customer would.
+          The enquiry and booking steps show the complete flow; they connect to your own accounts when we set you up.
           This is what your website does for your business:
         </p>
 
