@@ -15,6 +15,8 @@ export function Hero({ client, modules, onLaunchRedesign, onLaunchEstimator }) {
   }, []);
   return (
     <section className="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden border-b border-white/5">
+      <div className="absolute inset-0 -z-20 bg-[radial-gradient(ellipse_75%_60%_at_50%_0%,rgba(163,132,97,0.20),transparent_60%)] pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-40 -z-10 bg-gradient-to-b from-transparent to-[#0c0c0e] pointer-events-none" />
       {/* Subtle Background Glows */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(680px,90vw)] h-[380px] bg-brand-500/30 blur-[130px] rounded-full pointer-events-none -z-10 glow-drift" />
       <div className="absolute top-10 right-10 w-72 h-72 bg-luxury-gold/15 blur-[100px] rounded-full pointer-events-none -z-10 glow-drift-alt" />
