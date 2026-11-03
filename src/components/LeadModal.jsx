@@ -90,7 +90,7 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify({
             access_key: web3formsKey,
-            subject: `New consultation request - ${client.name}`,
+            subject: `${client.isSample ? "[DEMO TEST] " : ""}New consultation request - ${client.name}`,
             name: formData.name,
             email: formData.email,
             phone: formData.phone,

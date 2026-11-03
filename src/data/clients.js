@@ -13,7 +13,7 @@ export const PRESET_CLIENTS = {
     analyticsEndpoint: '', // Consent-gated event collector; empty = no analytics, nothing tracked
     email: '',
     tagline: 'Premier Full-Home Renovation & Architectural Climate Comfort',
-    heroHeadline: 'Experience Your Home Reimagined in Photorealistic 3D',
+    heroHeadline: 'Explore Photorealistic Design Concepts for Your Home',
     heroSubheadline: 'From complete architectural redesigns to bespoke living spaces in South Florida. Explore AI design concepts and an illustrative estimate before you commit.',
     accentColor: '#a38461',
     badge: 'Sample demo profile - not a real business',

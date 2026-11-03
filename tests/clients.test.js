@@ -56,3 +56,7 @@ describe('Platform demo hosts', () => {
     expect(isPlatformDemoHost('')).toBe(false);
   });
 });
+
+it('does not market the style-only concept demo as an interactive 3D service', () => {
+  expect(PRESET_CLIENTS['del-air'].heroHeadline).not.toMatch(/3D/i);
+});
