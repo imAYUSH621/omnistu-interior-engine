@@ -65,3 +65,23 @@ describe('Client-dependent module gating in the enquiry flow', () => {
     expect(await screen.findByText(/CRM handoff failed/i)).toBeDefined();
   });
 });
+
+describe('Visitor analytics consent notice', () => {
+  beforeEach(() => { localStorage.clear(); });
+  afterEach(() => { vi.unstubAllEnvs(); vi.restoreAllMocks(); });
+
+  it('shows the consent notice when analytics is configured and hides it after a choice', async () => {
+    const client = { ...base, analyticsEndpoint: 'https://a.example/collect' };
+    render(<LeadModal isOpen={true} onClose={() => {}} client={client} contextData={{}} />);
+    expect(screen.getByText(/Allow anonymous usage events/i)).toBeDefined();
+
+    fireEvent.click(screen.getByText(/No thanks/i));
+    expect(screen.queryByText(/Allow anonymous usage events/i)).toBeNull();
+    expect(localStorage.getItem('omnistu_analytics_consent:omnistu-demo')).toBe('declined');
+  });
+
+  it('does not show the notice when analytics is not configured', () => {
+    render(<LeadModal isOpen={true} onClose={() => {}} client={base} contextData={{}} />);
+    expect(screen.queryByText(/Allow anonymous usage events/i)).toBeNull();
+  });
+});

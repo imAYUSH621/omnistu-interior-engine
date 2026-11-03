@@ -18,7 +18,8 @@ describe('Honesty and sample labeling guarantees', () => {
     render(<RoomRedesignEngine client={DEFAULT_CLIENT} onOpenLeadModal={() => {}} />);
     expect(screen.getAllByText(/For inspiration and planning only/i).length).toBeGreaterThan(0);
     expect(screen.queryByText(/3D REDESIGN/i)).toBeNull();
-    expect(screen.getByText(/SAMPLE PHOTO \(AI BUSY\)/i)).toBeDefined();
+    // sample photo is always labelled as a sample; the suffix names the AI state (busy vs not yet generated)
+    expect(screen.getByText(/SAMPLE PHOTO \((GENERATE AI CONCEPT|AI BUSY)\)/i)).toBeDefined();
   });
 
   it('marks sample clients and ships them without fabricated contact details', () => {

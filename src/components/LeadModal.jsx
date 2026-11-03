@@ -3,7 +3,7 @@ import { X, CheckCircle, MessageCircle, ArrowRight, ShieldCheck, Phone, Mail, Us
 import { CalEmbed } from './CalEmbed';
 import { getModules } from '../data/clients';
 import { handoffLeadToCrm } from '../services/crmHandoff';
-import { trackEvent } from '../services/analyticsEvents';
+import { trackEvent, getAnalyticsConsent, setAnalyticsConsent } from '../services/analyticsEvents';
 
 export function LeadModal({ isOpen, onClose, client, contextData }) {
   const [formData, setFormData] = useState({
@@ -18,6 +18,13 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
   // CRM handoff is a separate state from delivery: provider acceptance is not
   // inbox receipt, and neither is CRM sync.
   const [crmSync, setCrmSync] = useState(null); // null | 'skipped' | 'synced' | 'failed'
+  // Visitor analytics consent: null = no choice yet (notice shown when the
+  // studio has analytics configured), true/false = explicit choice.
+  const [analyticsConsent, setAnalyticsConsentState] = useState(() => getAnalyticsConsent(client));
+  const chooseAnalyticsConsent = (accepted) => {
+    setAnalyticsConsent(client, accepted);
+    setAnalyticsConsentState(accepted);
+  };
   const modules = getModules(client);
 
   if (!isOpen) return null;
@@ -323,6 +330,37 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
               Close Window
             </button>
           </div>
+        )}
+
+        {/* Visitor analytics consent: only appears when the studio has an
+            analytics endpoint configured, and only until the visitor chooses.
+            A configured endpoint is the owner's choice, not the visitor's. */}
+        {client.analyticsEndpoint && analyticsConsent === null && (
+          <div className="mt-5 p-3 rounded-xl bg-zinc-900 border border-zinc-800 text-left">
+            <p className="text-[11px] text-zinc-400 leading-relaxed">
+              Allow anonymous usage events on this site? Only the type of action
+              is counted - never your name, phone, email or enquiry details.
+            </p>
+            <div className="mt-2 flex items-center space-x-3">
+              <button
+                onClick={() => chooseAnalyticsConsent(true)}
+                className="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-[11px] font-semibold transition"
+              >
+                Allow
+              </button>
+              <button
+                onClick={() => chooseAnalyticsConsent(false)}
+                className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[11px] transition"
+              >
+                No thanks
+              </button>
+            </div>
+          </div>
+        )}
+        {client.analyticsEndpoint && analyticsConsent === true && (
+          <p className="mt-4 text-[10px] font-mono text-zinc-600">
+            Anonymous usage events are on (no personal details). You can withdraw anytime by clearing site data.
+          </p>
         )}
 
       </div>

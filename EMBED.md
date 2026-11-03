@@ -56,9 +56,12 @@ Each client profile in `src/data/clients.js` can carry:
   that holds the secret. The UI reports the handoff as its own state
   (accepted / failed / not configured), distinct from inbox delivery.
 - `analyticsEndpoint`: optional consent-aware event collector. When set, the
-  app POSTs coarse events (`enquiry_submitted`, `booking_clicked`,
+  visitor sees an explicit consent notice; only after they accept does the
+  app POST coarse events (`enquiry_submitted`, `booking_clicked`,
   `whatsapp_clicked`) containing only `{ event, clientId, at }` - never
-  names, phone numbers, emails or other personal payload.
+  names, phone numbers, emails or other personal payload. Declining stores
+  that choice and blocks all events; a configured endpoint alone (the site
+  owner's choice) never fires anything.
 
 ## 4. Honesty notes
 
