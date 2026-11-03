@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { X, CheckCircle, MessageCircle, ArrowRight, ShieldCheck, Phone, Mail, User, Clock } from 'lucide-react';
 import { CalEmbed } from './CalEmbed';
+import { getModules } from '../data/clients';
+import { handoffLeadToCrm } from '../services/crmHandoff';
+import { trackEvent } from '../services/analyticsEvents';
 
 export function LeadModal({ isOpen, onClose, client, contextData }) {
   const [formData, setFormData] = useState({
@@ -12,6 +15,10 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
   });
   const [submitted, setSubmitted] = useState(false);
   const [delivery, setDelivery] = useState(null); // 'sent' | 'failed' | 'demo'
+  // CRM handoff is a separate state from delivery: provider acceptance is not
+  // inbox receipt, and neither is CRM sync.
+  const [crmSync, setCrmSync] = useState(null); // null | 'skipped' | 'synced' | 'failed'
+  const modules = getModules(client);
 
   if (!isOpen) return null;
 
@@ -73,6 +80,10 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
         const data = res && typeof res.json === 'function' ? await res.json().catch(() => null) : null;
         const accepted = !!(res && res.ok && data && data.success === true);
         setDelivery(accepted ? 'sent' : 'failed');
+        if (accepted) {
+          trackEvent(client, 'enquiry_submitted');
+          setCrmSync(await handoffLeadToCrm({ endpoint: client.crmWebhookUrl, lead: newLead }));
+        }
       } catch {
         setDelivery('failed');
       }
@@ -91,6 +102,10 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
           if (data && (data.success === false || data.ok === false)) accepted = false;
         }
         setDelivery(accepted ? 'sent' : 'failed');
+        if (accepted) {
+          trackEvent(client, 'enquiry_submitted');
+          setCrmSync(await handoffLeadToCrm({ endpoint: client.crmWebhookUrl, lead: newLead }));
+        }
       } catch {
         setDelivery('failed');
       }
@@ -236,17 +251,27 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
                   <>Thank you, <span className="font-semibold text-white">{formData.name}</span>. This demo is not connected to a live inbox yet, so your request was <span className="font-semibold text-amber-300">not sent anywhere</span>. In the live version it goes straight to the studio.</>
                 )}
               </p>
+              {delivery === 'sent' && crmSync && (
+                <p className="text-[11px] font-mono text-zinc-500">
+                  {crmSync === 'synced'
+                    ? 'CRM handoff: accepted by the configured CRM endpoint.'
+                    : crmSync === 'failed'
+                      ? 'CRM handoff failed - your request was still received by the studio inbox above.'
+                      : 'CRM handoff: not configured for this studio yet.'}
+                </p>
+              )}
             </div>
 
-            {(whatsappNumber || client.phone || bookingUrl || calLink) && (
+            {((modules.whatsapp && whatsappNumber) || client.phone || (modules.booking && (bookingUrl || calLink))) && (
             <div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 text-left space-y-3">
               <div className="text-xs font-mono uppercase tracking-wider text-zinc-400">
                 Instant Speed-to-Lead Direct Options:
               </div>
 
               {/* Direct WhatsApp Action */}
-              {whatsappNumber && (
+              {modules.whatsapp && whatsappNumber && (
               <a
+                onClick={() => trackEvent(client, 'whatsapp_clicked')}
                 href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -269,15 +294,16 @@ export function LeadModal({ isOpen, onClose, client, contextData }) {
               )}
 
               {/* Native Cal.com hosted booking embed (only when configured) */}
-              {calLink && (
-              <div className="rounded-xl overflow-hidden border border-zinc-800 bg-zinc-950 p-2">
+              {modules.booking && calLink && (
+              <div onClick={() => trackEvent(client, 'booking_clicked')} className="rounded-xl overflow-hidden border border-zinc-800 bg-zinc-950 p-2">
                 <CalEmbed calLink={calLink} />
               </div>
               )}
 
               {/* Booking link (only when a real scheduler URL is configured) */}
-              {!calLink && bookingUrl && (
+              {modules.booking && !calLink && bookingUrl && (
               <a
+                onClick={() => trackEvent(client, 'booking_clicked')}
                 href={bookingUrl}
                 target="_blank"
                 rel="noopener noreferrer"

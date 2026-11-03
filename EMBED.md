@@ -37,9 +37,30 @@ Replace `CLIENT_SLUG` with the client's profile slug, or append
   otherwise it shows the explicit "Demo Mode - Not Sent" state. Nothing is
   silently sent anywhere.
 - The direct WhatsApp and booking buttons appear only when
-  `VITE_DEMO_WHATSAPP` / `VITE_BOOKING_URL` are configured.
+  `VITE_DEMO_WHATSAPP` / `VITE_BOOKING_URL` (or the client profile's
+  `whatsapp` / `calLink`) are configured.
 
-## 3. Honesty notes
+## 3. Per-client module switches and integrations
+
+Each client profile in `src/data/clients.js` can carry:
+
+- `modules`: `{ aiStudio, estimator, portfolio, whatsapp, booking }` - set
+  any flag to `false` to hide that module for clients who already run their
+  own equivalent. Unset flags default to on.
+- `crmWebhookUrl`: optional generic webhook that receives a lead JSON POST
+  after the primary delivery channel confirms acceptance. This is an
+  unverified connector: it is not proven against any specific CRM (e.g.
+  Twenty) until the actual endpoint, schema and auth are tested. CRM auth
+  secrets must never live in this frontend config or any `VITE_*` variable;
+  a CRM that needs an API key belongs behind a small server-side adapter
+  that holds the secret. The UI reports the handoff as its own state
+  (accepted / failed / not configured), distinct from inbox delivery.
+- `analyticsEndpoint`: optional consent-aware event collector. When set, the
+  app POSTs coarse events (`enquiry_submitted`, `booking_clicked`,
+  `whatsapp_clicked`) containing only `{ event, clientId, at }` - never
+  names, phone numbers, emails or other personal payload.
+
+## 4. Honesty notes
 
 - Visitor photos stay on the page and are never sent or analyzed; the AI
   concept is generated from style choices only (free Pollinations tier).

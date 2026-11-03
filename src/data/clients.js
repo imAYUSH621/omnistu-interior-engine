@@ -7,10 +7,10 @@ export const PRESET_CLIENTS = {
     city: 'Orlando & South Florida',
     phone: '',
     whatsapp: '',
-  web3formsKey: '',
-  calLink: '',
     web3formsKey: '', // Web3Forms access key for native lead delivery; empty = lead delivery inactive
     calLink: '', // Cal.com hosted booking link (user/event-type); empty = booking embed inactive
+    crmWebhookUrl: '', // Generic CRM handoff endpoint (non-secret URL only); empty = CRM handoff inactive
+    analyticsEndpoint: '', // Consent-gated event collector; empty = no analytics, nothing tracked
     email: '',
     tagline: 'Premier Full-Home Renovation & Architectural Climate Comfort',
     heroHeadline: 'Experience Your Home Reimagined in Photorealistic 3D',
@@ -28,10 +28,10 @@ export const PRESET_CLIENTS = {
     city: 'Manhattan & The Hamptons, NY',
     phone: '',
     whatsapp: '',
-  web3formsKey: '',
-  calLink: '',
     web3formsKey: '', // Web3Forms access key for native lead delivery; empty = lead delivery inactive
     calLink: '', // Cal.com hosted booking link (user/event-type); empty = booking embed inactive
+    crmWebhookUrl: '', // Generic CRM handoff endpoint (non-secret URL only); empty = CRM handoff inactive
+    analyticsEndpoint: '', // Consent-gated event collector; empty = no analytics, nothing tracked
     email: '',
     tagline: 'High-Concept Residential & Penthouse Interior Architecture',
     heroHeadline: 'Bespoke Interior Architecture for Discerning Homeowners',
@@ -49,10 +49,10 @@ export const PRESET_CLIENTS = {
     city: 'Austin & Dallas, TX',
     phone: '',
     whatsapp: '',
-  web3formsKey: '',
-  calLink: '',
     web3formsKey: '', // Web3Forms access key for native lead delivery; empty = lead delivery inactive
     calLink: '', // Cal.com hosted booking link (user/event-type); empty = booking embed inactive
+    crmWebhookUrl: '', // Generic CRM handoff endpoint (non-secret URL only); empty = CRM handoff inactive
+    analyticsEndpoint: '', // Consent-gated event collector; empty = no analytics, nothing tracked
     email: '',
     tagline: 'Turnkey Architectural Design, Custom Millwork & Whole-Home Remodeling',
     heroHeadline: 'Instant 3D Architectural Remodel Before You Break Ground',
@@ -70,10 +70,10 @@ export const PRESET_CLIENTS = {
     city: 'Los Angeles & Beverly Hills, CA',
     phone: '',
     whatsapp: '',
-  web3formsKey: '',
-  calLink: '',
     web3formsKey: '', // Web3Forms access key for native lead delivery; empty = lead delivery inactive
     calLink: '', // Cal.com hosted booking link (user/event-type); empty = booking embed inactive
+    crmWebhookUrl: '', // Generic CRM handoff endpoint (non-secret URL only); empty = CRM handoff inactive
+    analyticsEndpoint: '', // Consent-gated event collector; empty = no analytics, nothing tracked
     email: '',
     tagline: 'Quiet Luxury, Natural Stone & Calibrated Architectural Lighting',
     heroHeadline: 'Turn Your Space into a Serene Architectural Oasis',
@@ -87,6 +87,27 @@ export const PRESET_CLIENTS = {
   }
 };
 
+
+// Per-client module switches. Every module defaults ON for backward
+// compatibility; a client who already runs their own calendar, CRM, quoting
+// or portfolio turns that piece OFF here instead of receiving a duplicate.
+export const DEFAULT_MODULES = {
+  aiStudio: true,   // Interactive AI design concept studio
+  estimator: true,  // Scope & investment estimator
+  portfolio: true,  // Portfolio showcase
+  whatsapp: true,   // WhatsApp speed-to-lead inside the enquiry flow
+  booking: true,    // Consultation booking (Cal.com hosted embed) inside the enquiry flow
+};
+
+export function getModules(client) {
+  const overrides = (client && client.modules) || {};
+  const merged = { ...DEFAULT_MODULES };
+  for (const key of Object.keys(DEFAULT_MODULES)) {
+    if (typeof overrides[key] === 'boolean') merged[key] = overrides[key];
+  }
+  return merged;
+}
+
 export const DEFAULT_CLIENT = {
   id: 'omnistu-demo',
   name: 'Omnistu Interior Studio',
@@ -95,6 +116,8 @@ export const DEFAULT_CLIENT = {
   whatsapp: '',
   web3formsKey: '',
   calLink: '',
+  crmWebhookUrl: '',
+  analyticsEndpoint: '',
   email: '',
   tagline: 'AI interior design concepts, instant estimates and client demos',
   heroHeadline: 'Get a Free AI Design Concept for Your Space',

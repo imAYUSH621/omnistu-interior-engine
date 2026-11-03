@@ -7,10 +7,11 @@ import { PortfolioShowcase } from './components/PortfolioShowcase';
 import { LeadModal } from './components/LeadModal';
 import { OnboardingModal } from './components/OnboardingModal';
 import { Footer } from './components/Footer';
-import { getClientProfile, DEFAULT_CLIENT } from './data/clients';
+import { getClientProfile, DEFAULT_CLIENT, getModules } from './data/clients';
 
 export function App() {
   const [currentClient, setCurrentClient] = useState(DEFAULT_CLIENT);
+  const modules = useMemo(() => getModules(currentClient), [currentClient]);
   const [leadModalOpen, setLeadModalOpen] = useState(false);
   const [leadContext, setLeadContext] = useState(null);
   const [onboardModalOpen, setOnboardModalOpen] = useState(false);
@@ -124,27 +125,34 @@ export function App() {
         {/* Hero Section */}
         <Hero
           client={currentClient}
+          modules={modules}
           onLaunchRedesign={() => scrollToSection('room-redesign')}
           onLaunchEstimator={() => scrollToSection('cost-estimator')}
         />
 
         {/* 1. Interactive AI Room Redesign & Staging (Adapted from roomGPT) */}
-        <RoomRedesignEngine
-          client={currentClient}
-          onOpenLeadModal={handleOpenLeadModal}
-        />
+        {modules.aiStudio && (
+          <RoomRedesignEngine
+            client={currentClient}
+            onOpenLeadModal={handleOpenLeadModal}
+          />
+        )}
 
         {/* 2. Transparent Scope & Cost Calculator */}
-        <CostEstimator
-          client={currentClient}
-          onOpenLeadModal={handleOpenLeadModal}
-        />
+        {modules.estimator && (
+          <CostEstimator
+            client={currentClient}
+            onOpenLeadModal={handleOpenLeadModal}
+          />
+        )}
 
         {/* 3. SOTA Curated Architectural Portfolio */}
-        <PortfolioShowcase
-          client={currentClient}
-          onOpenLeadModal={handleOpenLeadModal}
-        />
+        {modules.portfolio && (
+          <PortfolioShowcase
+            client={currentClient}
+            onOpenLeadModal={handleOpenLeadModal}
+          />
+        )}
       </main>
 
       {/* Architectural Brand Footer */}
