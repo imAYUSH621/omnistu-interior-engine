@@ -68,6 +68,7 @@ export function StudioOffers() {
           labels state plainly what works in this demo and what connects during setup.
         </p>
 
+        <a href="?view=rehearsal" className="mt-7 inline-flex items-center rounded-xl border border-brand-400/40 bg-brand-500/10 px-5 py-3 text-sm text-brand-200">Rehearse the client journey - no accounts or CRM needed</a>
         <div className="mt-10 space-y-6">
           {OFFERS.map((offer) => (
             <div key={offer.title} className="gradient-ring rounded-2xl p-6 sm:p-7">

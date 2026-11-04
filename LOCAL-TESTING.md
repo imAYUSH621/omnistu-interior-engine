@@ -74,3 +74,21 @@ require the selected CRM's lookup/idempotency semantics, approved durable
 storage, authentication, access rules and retention policy. Adding a local
 queue of contact data without those choices would create a new privacy and
 duplicate-delivery risk. No extra lead journal/storage was added for this fix.
+
+## Client-facing rehearsal (no connected accounts)
+
+Open `/?view=rehearsal` from the service overview. The existing-site path
+rehearses a style choice without generating an image. The full-site path reuses
+the actual Indian preset estimator and carries its current room, tier, area
+and INR range into a fixed sample enquiry and studio handoff. These are
+illustrative rates, not the client's quote.
+
+This route intentionally does not render the submission modal, send email,
+write CRM records, book appointments or save data to browser storage. Three
+controlled handoff states explain accepted email/CRM-off, rejection and an
+unknown CRM outcome. They are simulations, not integration test evidence.
+Going to another route (such as the actual embed) leaves this rehearsal.
+The browser test blocks external requests, including the shared Google Fonts
+stylesheet, and checks both setup paths, outcomes, no POST, no stored data,
+no browser errors and a 390px mobile viewport. Existing integration/browser
+tests still cover the real mocked submit flow separately.

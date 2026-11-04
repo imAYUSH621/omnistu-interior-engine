@@ -11,6 +11,7 @@ import { StudioOffers } from './components/StudioOffers';
 import { getClientProfile, DEFAULT_CLIENT, getModules, isPlatformDemoHost } from './data/clients';
 import { DemoPrologue } from './components/DemoPrologue';
 import { DemoGuide } from './components/DemoGuide';
+import { ClientRehearsal } from './components/ClientRehearsal';
 import { OwnerInbox } from './components/OwnerInbox';
 
 export function App() {
@@ -130,6 +131,8 @@ export function App() {
     post();
     return () => observer.disconnect();
   }, [isEmbed]);
+
+  if (viewParam === 'rehearsal') return <ClientRehearsal />;
 
   if (isOffers) {
     return <StudioOffers />;

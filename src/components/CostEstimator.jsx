@@ -37,7 +37,7 @@ const TIERS = [
 // the US-dollar reference bands. All figures remain illustrative estimates.
 const DEFAULT_ESTIMATOR_CONFIG = { currency: '$', locale: 'en-US', tiers: TIERS };
 
-export function CostEstimator({ client, onOpenLeadModal }) {
+export function CostEstimator({ client, onOpenLeadModal, rehearsal = false }) {
   const estimatorConfig = (client && client.estimator && Array.isArray(client.estimator.tiers) && client.estimator.tiers.length > 0)
     ? { ...DEFAULT_ESTIMATOR_CONFIG, ...client.estimator }
     : DEFAULT_ESTIMATOR_CONFIG;
@@ -249,12 +249,12 @@ export function CostEstimator({ client, onOpenLeadModal }) {
               })}
               className="w-full py-4 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-sm tracking-wide shadow-xl shadow-brand-500/25 transition active:scale-95 flex items-center justify-center space-x-2"
             >
-              <span>Get Itemized Estimate & Free Consult</span>
+              <span>{rehearsal ? 'Use this illustrative estimate' : 'Get Itemized Estimate & Free Consult'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 
             <div className="text-center text-[11px] text-zinc-500 font-mono">
-              Includes complimentary 30-min architectural consultation
+              {rehearsal ? 'Sample price bands, not a quote or a booked consultation' : 'Includes complimentary 30-min architectural consultation'}
             </div>
 
           </div>
